@@ -1,0 +1,16 @@
+{
+  "name": "Weather",
+  "author": "sgarr",
+  "flags": [],
+  "api_version": 1,
+  "publish": {
+    "tags": [
+      "weather",
+      "forecast",
+      "minimal",
+      "qam"
+    ],
+    "description": "A compact weather panel for Decky Loader, made for Steam Big Picture and controller navigation.",
+    "image": ""
+  }
+}
