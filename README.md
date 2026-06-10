@@ -16,36 +16,6 @@ It is built for Steam Big Picture and controller navigation, with a narrow QAM-s
 - Controller-friendly navigation with up, down, left, and right.
 - Minimal dark UI with small motion details.
 
-## Build on Windows
-
-Decky recommends `pnpm`, but this project also builds with `npm` on Windows.
-
-```powershell
-npm install
-npm run build
-```
-
-The build creates `dist/index.js`, which Decky needs at runtime.
-
-## Manual Install
-
-Copy the ready folder:
-
-```text
-release/weather/
-```
-
-It must include:
-
-- `plugin.json`
-- `package.json`
-- `main.py`
-- `README.md`
-- `LICENSE`
-- `dist/index.js`
-
-Then reload Decky Loader.
-
 ## Notes
 
-The default location is Milan. Open Weather in the QAM, go to Settings, change the city field, and press Save location. Coordinates also work, for example `45.4642,9.19`.
+The default location is Rome. Open Weather in the QAM, go to Settings, change the city field, and press Save location. Coordinates also work, for example `45.4642,9.19`.
