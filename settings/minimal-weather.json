@@ -1,8 +1,11 @@
 {
-  "location": "Roma",
+  "location": "Milano",
   "units": "metric",
   "compact": false,
-  "language": "en",
-  "location_set": true,
-  "version": 2
+  "topbar_enabled": true,
+  "topbar_show_icon": true,
+  "language": "it",
+  "location_set": false,
+  "version": 2,
+  "topbar_left": false
 }

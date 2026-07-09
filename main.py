@@ -1,7 +1,11 @@
 import asyncio
+import base64
 import json
 import os
+import random
 import re
+import socket
+import struct
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -13,6 +17,9 @@ DEFAULT_SETTINGS = {
     "location": "Milano",
     "units": "metric",
     "compact": False,
+    "topbar_enabled": True,
+    "topbar_show_icon": True,
+    "topbar_left": False,
     "language": "it",
     "location_set": False,
     "version": 2,
@@ -93,13 +100,32 @@ WEATHER_CODES = {
 }
 
 
+TOPBAR_REFRESH_SECONDS = 600
+TOPBAR_REINJECT_SECONDS = 10
+TOPBAR_CEF_PORT = 8080
+TOPBAR_STYLE_ID = "decky-weather-topbar-style"
+TOPBAR_BADGE_ID = "decky-weather-topbar-badge"
+TOPBAR_CLOCK_SELECTORS = [
+    "._1HhLUvHH6BZLIOyOE80TVh",
+    "#header ._1HhLUvHH6BZLIOyOE80TVh",
+]
+
 class Plugin:
     async def _main(self):
         decky.logger.info("Weather loaded")
         os.makedirs(self._settings_dir(), exist_ok=True)
+        self._topbar_task = asyncio.create_task(self._topbar_loop())
 
     async def _unload(self):
         decky.logger.info("Weather unloaded")
+        task = getattr(self, "_topbar_task", None)
+        if task:
+            task.cancel()
+            try:
+                await task
+            except asyncio.CancelledError:
+                pass
+        await self._inject_topbar_badge("", False, False)
 
     async def _uninstall(self):
         decky.logger.info("Weather uninstalled")
@@ -115,7 +141,11 @@ class Plugin:
         os.makedirs(self._settings_dir(), exist_ok=True)
         with open(self._settings_path(), "w", encoding="utf-8") as settings_file:
             json.dump(normalized, settings_file, ensure_ascii=False, indent=2)
+        asyncio.create_task(self._refresh_topbar_once())
         return normalized
+
+    async def refresh_topbar(self):
+        return await self._refresh_topbar_once()
 
     async def get_weather(self, settings=None):
         normalized = self._normalize_settings(settings or self._read_settings())
@@ -167,6 +197,9 @@ class Plugin:
             "location": location[:80],
             "units": units,
             "compact": bool(settings.get("compact", DEFAULT_SETTINGS["compact"])),
+            "topbar_enabled": bool(settings.get("topbar_enabled", DEFAULT_SETTINGS["topbar_enabled"])),
+            "topbar_show_icon": True,
+            "topbar_left": bool(settings.get("topbar_left", DEFAULT_SETTINGS["topbar_left"])),
             "language": language,
             "location_set": bool(settings.get("location_set", False)),
             "version": 2,
@@ -259,6 +292,462 @@ class Plugin:
             "daily": daily_items,
             "hourly": hourly_items,
         }
+
+
+    async def _topbar_loop(self):
+        self._ensure_cef_remote_debugging_flag()
+        label = ""
+        enabled = False
+        last_fetch = 0.0
+        loop = asyncio.get_event_loop()
+
+        while True:
+            try:
+                now = loop.time()
+                settings = self._read_settings()
+                enabled = bool(settings.get("topbar_enabled", True))
+
+                if not enabled:
+                    label = ""
+                    await self._inject_topbar_badge("", False, bool(settings.get("topbar_left", False)))
+                    await asyncio.sleep(TOPBAR_REINJECT_SECONDS)
+                    continue
+
+                if not label or now - last_fetch >= TOPBAR_REFRESH_SECONDS:
+                    try:
+                        weather = await loop.run_in_executor(None, self._fetch_weather_sync, settings)
+                        label = self._format_topbar_label(weather, settings)
+                        last_fetch = now
+                    except Exception as error:
+                        decky.logger.warning(f"Weather top bar update failed: {error}")
+
+                await self._inject_topbar_badge(label, enabled, bool(settings.get("topbar_left", False)))
+            except asyncio.CancelledError:
+                raise
+            except Exception as error:
+                decky.logger.warning(f"Weather top bar loop error: {error}")
+
+            await asyncio.sleep(TOPBAR_REINJECT_SECONDS)
+
+    async def _refresh_topbar_once(self):
+        self._ensure_cef_remote_debugging_flag()
+        settings = self._read_settings()
+        if not settings.get("topbar_enabled", True):
+            await self._inject_topbar_badge("", False, bool(settings.get("topbar_left", False)))
+            return {"enabled": False, "label": ""}
+
+        loop = asyncio.get_event_loop()
+        try:
+            weather = await loop.run_in_executor(None, self._fetch_weather_sync, settings)
+            label = self._format_topbar_label(weather, settings)
+            await self._inject_topbar_badge(label, True, bool(settings.get("topbar_left", False)))
+            return {"enabled": True, "label": label}
+        except Exception as error:
+            decky.logger.warning(f"Weather top bar manual refresh failed: {error}")
+            return {"enabled": True, "label": "", "error": str(error)}
+
+    def _format_topbar_label(self, weather, settings):
+        current = (weather or {}).get("current") or {}
+        try:
+            temperature = round(float(current.get("temperature")))
+        except Exception:
+            return ""
+
+        unit = ((weather or {}).get("units") or {}).get("temperature")
+        suffix = "F" if unit == "degF" else ""
+        temp = f"{temperature}°{suffix}"
+
+        return f"{self._topbar_emoji(current)} {temp}"
+
+    def _topbar_emoji(self, current):
+        code = self._safe_int(current.get("weather_code"))
+        tone = current.get("tone")
+        if tone == "storm" or code in (95, 96, 99):
+            return "🌩️"
+        if tone == "snow" or 71 <= code <= 86:
+            return "❄️"
+        if tone == "rain" or 51 <= code <= 67 or 80 <= code <= 82:
+            return "🌧️"
+        if tone == "fog" or code in (45, 48):
+            return "🌫️"
+        if code == 3:
+            return "☁️"
+        if code in (1, 2) or tone == "cloud":
+            return "🌤️"
+        if current.get("is_day") is False:
+            return "🌙"
+        return "☀️"
+
+    async def _inject_topbar_badge(self, label, enabled=True, left=False):
+        targets = await asyncio.get_event_loop().run_in_executor(None, self._steam_browser_targets)
+        if not targets:
+            return False
+
+        script = self._topbar_injection_script(label, enabled, left)
+        results = await asyncio.gather(
+            *[
+                asyncio.get_event_loop().run_in_executor(
+                    None, self._evaluate_steam_target, target, script
+                )
+                for target in targets
+            ],
+            return_exceptions=True,
+        )
+        return any(result is True for result in results)
+
+    def _topbar_injection_script(self, label, enabled=True, left=False):
+        label_value = str(label or "")
+        icon_value = ""
+        temp_value = label_value
+        if label_value:
+            parts = label_value.split(" ", 1)
+            if len(parts) == 2:
+                icon_value, temp_value = parts[0], parts[1]
+
+        label_json = json.dumps(label_value, ensure_ascii=False)
+        icon_json = json.dumps(icon_value, ensure_ascii=False)
+        temp_json = json.dumps(temp_value, ensure_ascii=False)
+        enabled_json = "true" if enabled and label_value else "false"
+        left_json = "true" if left else "false"
+        selectors_json = json.dumps(TOPBAR_CLOCK_SELECTORS)
+        return f"""
+(function() {{
+  const badgeId = {json.dumps(TOPBAR_BADGE_ID)};
+  const styleId = {json.dumps(TOPBAR_STYLE_ID)};
+  const label = {label_json};
+  const iconText = {icon_json};
+  const tempText = {temp_json};
+  const enabled = {enabled_json};
+  const moveLeft = {left_json};
+  const selectors = {selectors_json};
+
+  function removeWeatherBadge() {{
+    document.querySelectorAll('#' + badgeId).forEach((node) => node.remove());
+    document.documentElement.removeAttribute('data-decky-weather-topbar');
+    document.documentElement.removeAttribute('data-decky-weather-left');
+    const previousClock = document.querySelector('[data-decky-weather-clock="1"]');
+    if (previousClock) {{
+      previousClock.removeAttribute('data-decky-weather-clock');
+      previousClock.style.removeProperty('order');
+    }}
+  }}
+
+  function ownClockText(node) {{
+    return Array.from(node.childNodes)
+      .filter((child) => child.nodeType === Node.TEXT_NODE)
+      .map((child) => child.textContent || '')
+      .join(' ')
+      .trim();
+  }}
+
+  function findClock() {{
+    for (const selector of selectors) {{
+      const match = document.querySelector(selector);
+      if (match) return match;
+    }}
+    const header = document.querySelector('#header') || document.querySelector('.BasicUIHeader_Header_1E_SL');
+    if (!header) return null;
+    const nodes = Array.from(header.querySelectorAll('div, span, button'));
+    return nodes.find((node) => {{
+      const text = ownClockText(node) || (node.textContent || '').trim();
+      return /^\d{{1,2}}:\d{{2}}(?:\s|$)/.test(text);
+    }}) || null;
+  }}
+
+  function installStyle() {{
+    const style = document.getElementById(styleId) || document.createElement('style');
+    style.id = styleId;
+    style.textContent = `
+      #${{badgeId}} {{
+        display: inline-flex !important;
+        align-items: baseline !important;
+        justify-content: center !important;
+        gap: 0.16em !important;
+        margin-left: 0.34em !important;
+        padding: 0 !important;
+        width: auto !important;
+        min-width: max-content !important;
+        max-width: none !important;
+        height: auto !important;
+        line-height: inherit !important;
+        font: inherit !important;
+        font-size: 1em !important;
+        font-weight: inherit !important;
+        letter-spacing: inherit !important;
+        color: inherit !important;
+        opacity: 0.98 !important;
+        white-space: nowrap !important;
+        overflow: visible !important;
+        transform: none !important;
+        pointer-events: none !important;
+        vertical-align: baseline !important;
+      }}
+      #${{badgeId}} .decky-weather-topbar-icon {{
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 0 0 auto !important;
+        width: 1em !important;
+        height: 1em !important;
+        font-size: calc(0.82em + 5px) !important;
+        line-height: 1 !important;
+        transform: translateY(0.04em) !important;
+        margin: 0 !important;
+      }}
+      #${{badgeId}} .decky-weather-topbar-temp {{
+        display: inline-block !important;
+        font: inherit !important;
+        font-size: 1em !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+        letter-spacing: inherit !important;
+        color: inherit !important;
+        transform: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }}
+      html[data-decky-weather-left="1"] #header ._1HhLUvHH6BZLIOyOE80TVh,
+      html[data-decky-weather-left="1"] #header [data-decky-weather-clock="1"] {{
+        order: -2 !important;
+      }}
+    `;
+    if (!style.parentNode) document.head.appendChild(style);
+  }}
+
+  function ensureWeatherBadge() {{
+    const state = window.__deckyWeatherTopbarState || {{ label, iconText, tempText, enabled, moveLeft }};
+    if (!state.enabled || !state.label) {{
+      removeWeatherBadge();
+      return false;
+    }}
+
+    installStyle();
+    const clock = findClock();
+    if (!clock) return false;
+
+    clock.setAttribute('data-decky-weather-clock', '1');
+    clock.style.display = 'inline-flex';
+    clock.style.alignItems = 'baseline';
+    clock.style.justifyContent = 'center';
+    clock.style.gap = '0';
+    clock.style.whiteSpace = 'nowrap';
+    clock.style.overflow = 'visible';
+    clock.style.textOverflow = 'clip';
+    clock.style.minWidth = 'max-content';
+    clock.style.maxWidth = 'none';
+
+    if (state.moveLeft) {{
+      clock.style.order = '-2';
+      document.documentElement.setAttribute('data-decky-weather-left', '1');
+    }} else {{
+      clock.style.removeProperty('order');
+      document.documentElement.removeAttribute('data-decky-weather-left');
+    }}
+
+    let badge = clock.querySelector('#' + badgeId);
+    if (!badge) {{
+      badge = document.createElement('span');
+      badge.id = badgeId;
+      badge.setAttribute('aria-hidden', 'true');
+      clock.appendChild(badge);
+    }}
+
+    let icon = badge.querySelector('.decky-weather-topbar-icon');
+    if (!icon) {{
+      icon = document.createElement('span');
+      icon.className = 'decky-weather-topbar-icon';
+      badge.appendChild(icon);
+    }}
+
+    let temp = badge.querySelector('.decky-weather-topbar-temp');
+    if (!temp) {{
+      temp = document.createElement('span');
+      temp.className = 'decky-weather-topbar-temp';
+      badge.appendChild(temp);
+    }}
+
+    icon.textContent = state.iconText || '';
+    temp.textContent = state.tempText || state.label || '';
+    badge.title = state.label || '';
+    document.documentElement.setAttribute('data-decky-weather-topbar', '1');
+    return true;
+  }}
+
+  window.__deckyWeatherTopbarState = {{
+    label,
+    iconText,
+    tempText,
+    enabled,
+    moveLeft,
+    updatedAt: Date.now(),
+  }};
+
+  if (!enabled || !label) {{
+    removeWeatherBadge();
+    return 'Weather top bar removed';
+  }}
+
+  installStyle();
+  ensureWeatherBadge();
+
+  if (!window.__deckyWeatherTopbarObserver) {{
+    let queued = false;
+    const queueEnsure = () => {{
+      if (queued) return;
+      queued = true;
+      window.setTimeout(() => {{
+        queued = false;
+        try {{ ensureWeatherBadge(); }} catch (error) {{}}
+      }}, 60);
+    }};
+
+    window.__deckyWeatherTopbarObserver = new MutationObserver(queueEnsure);
+    window.__deckyWeatherTopbarObserver.observe(document.documentElement, {{
+      childList: true,
+      subtree: true,
+    }});
+
+    window.__deckyWeatherTopbarInterval = window.setInterval(() => {{
+      try {{ ensureWeatherBadge(); }} catch (error) {{}}
+    }}, 1000);
+
+    document.addEventListener('visibilitychange', queueEnsure, true);
+    window.addEventListener('focus', queueEnsure, true);
+  }}
+
+  return 'Weather top bar ok';
+}})();
+"""
+
+    def _steam_browser_targets(self):
+        self._ensure_cef_remote_debugging_flag()
+        try:
+            request = urllib.request.Request(
+                f"http://127.0.0.1:{TOPBAR_CEF_PORT}/json/list",
+                headers={"User-Agent": "Decky Weather/2.0.0"},
+            )
+            with urllib.request.urlopen(request, timeout=2) as response:
+                targets = json.loads(response.read().decode("utf-8"))
+        except Exception:
+            return []
+
+        result = []
+        for target in targets if isinstance(targets, list) else []:
+            if not isinstance(target, dict):
+                continue
+            websocket_url = target.get("webSocketDebuggerUrl")
+            target_type = target.get("type")
+            if target_type and target_type != "page":
+                continue
+            if websocket_url and websocket_url not in result:
+                result.append(websocket_url)
+        return result
+
+    def _evaluate_steam_target(self, websocket_url, script):
+        try:
+            parsed = urllib.parse.urlparse(websocket_url)
+            if parsed.scheme != "ws":
+                return False
+
+            host = parsed.hostname or "127.0.0.1"
+            port = parsed.port or TOPBAR_CEF_PORT
+            path = parsed.path or "/"
+            if parsed.query:
+                path += "?" + parsed.query
+
+            with socket.create_connection((host, port), timeout=3) as sock:
+                sock.settimeout(3)
+                key = base64.b64encode(os.urandom(16)).decode("ascii")
+                request = (
+                    f"GET {path} HTTP/1.1\r\n"
+                    f"Host: {host}:{port}\r\n"
+                    "Upgrade: websocket\r\n"
+                    "Connection: Upgrade\r\n"
+                    f"Sec-WebSocket-Key: {key}\r\n"
+                    "Sec-WebSocket-Version: 13\r\n\r\n"
+                )
+                sock.sendall(request.encode("ascii"))
+                headers = b""
+                while b"\r\n\r\n" not in headers and len(headers) < 8192:
+                    chunk = sock.recv(1024)
+                    if not chunk:
+                        break
+                    headers += chunk
+
+                if b" 101 " not in headers.split(b"\r\n", 1)[0]:
+                    return False
+
+                command = {
+                    "id": random.randint(1, 2_000_000_000),
+                    "method": "Runtime.evaluate",
+                    "params": {
+                        "expression": script,
+                        "awaitPromise": False,
+                        "returnByValue": True,
+                    },
+                }
+                payload = json.dumps(command, ensure_ascii=False).encode("utf-8")
+                sock.sendall(self._websocket_text_frame(payload))
+                try:
+                    sock.recv(4096)
+                except Exception:
+                    pass
+                return True
+        except Exception as error:
+            decky.logger.debug(f"Weather top bar target injection failed: {error}")
+            return False
+
+    def _websocket_text_frame(self, payload):
+        frame = bytearray([0x81])
+        length = len(payload)
+        if length < 126:
+            frame.append(0x80 | length)
+        elif length < 65536:
+            frame.append(0x80 | 126)
+            frame.extend(struct.pack("!H", length))
+        else:
+            frame.append(0x80 | 127)
+            frame.extend(struct.pack("!Q", length))
+
+        mask = os.urandom(4)
+        frame.extend(mask)
+        frame.extend(byte ^ mask[index % 4] for index, byte in enumerate(payload))
+        return bytes(frame)
+
+    def _ensure_cef_remote_debugging_flag(self):
+        try:
+            steam_path = self._steam_path()
+            if not steam_path:
+                return
+            flag_path = os.path.join(steam_path, ".cef-enable-remote-debugging")
+            if not os.path.exists(flag_path):
+                with open(flag_path, "w", encoding="utf-8"):
+                    pass
+        except Exception as error:
+            decky.logger.debug(f"Cannot create Steam CEF remote debugging flag: {error}")
+
+    def _steam_path(self):
+        if os.name == "nt":
+            try:
+                import winreg
+
+                registry = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
+                key = winreg.OpenKey(registry, r"SOFTWARE\Wow6432Node\Valve\Steam")
+                value, value_type = winreg.QueryValueEx(key, "InstallPath")
+                if value_type == winreg.REG_SZ and value:
+                    return value
+            except Exception:
+                return r"C:\Program Files (x86)\Steam"
+
+        home = os.path.expanduser("~")
+        candidates = [
+            os.path.join(home, ".steam", "steam"),
+            os.path.join(home, ".local", "share", "Steam"),
+        ]
+        for candidate in candidates:
+            if os.path.exists(candidate):
+                return candidate
+        return candidates[0]
 
     def _next_hourly_items(self, hourly):
         times = hourly.get("time") or []
@@ -391,7 +880,7 @@ class Plugin:
     def _fetch_json(self, url):
         request = urllib.request.Request(
             url,
-            headers={"User-Agent": "Decky Weather/0.1.0"},
+            headers={"User-Agent": "Decky Weather/2.0.0"},
         )
         with urllib.request.urlopen(request, timeout=12) as response:
             return json.loads(response.read().decode("utf-8"))

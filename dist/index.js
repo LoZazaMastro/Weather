@@ -138,6 +138,9 @@ const TRANSLATIONS = {
         active: "Active",
         apparent: "Feels like",
         compactLayout: "Compact layout",
+        topBarWeather: "Show weather in top bar",
+        topBarWeatherIcon: "Show weather icon in top bar",
+        topBarLeft: "Move clock and weather to left",
         defaultCity: "Default: Milan",
         emptyLocationBody: "Enter a city or coordinates.",
         emptyLocationTitle: "Empty location",
@@ -170,6 +173,9 @@ const TRANSLATIONS = {
         active: "Attivo",
         apparent: "Percepiti",
         compactLayout: "Layout compatto",
+        topBarWeather: "Mostra meteo nella top bar",
+        topBarWeatherIcon: "Mostra icona meteo nella top bar",
+        topBarLeft: "Sposta orario e meteo a sinistra",
         defaultCity: "Default: Milano",
         emptyLocationBody: "Scrivi una città o coordinate.",
         emptyLocationTitle: "Località vuota",
@@ -808,6 +814,7 @@ const CONDITION_LABELS = {
 const getSettings = callable("get_settings");
 const saveSettings = callable("save_settings");
 const getWeather = callable("get_weather");
+const refreshTopbar = callable("refresh_topbar");
 const DeckyFocusable = DFL.Focusable;
 const DeckySpinner = DFL.SteamSpinner;
 const DEGREE = String.fromCharCode(176);
@@ -816,6 +823,9 @@ const DEFAULT_SETTINGS = {
     location: "Milano",
     units: "metric",
     compact: false,
+    topbar_enabled: true,
+    topbar_show_icon: true,
+    topbar_left: false,
     location_set: false,
     version: 2,
 };
@@ -1453,6 +1463,7 @@ function Content() {
             const localizedSaved = withLanguage(saved);
             setSettings(localizedSaved);
             setDraftLocation(saved.location);
+            refreshTopbar().catch(() => undefined);
             if (refreshWeather) {
                 await loadWeather(localizedSaved);
             }
@@ -1485,7 +1496,7 @@ function Content() {
             applyLocation();
         }
     }, [applyLocation]);
-    return (SP_JSX.jsx(DeckyFocusable, { "flow-children": "column", onKeyDown: handleKeyDown, style: styles.shell, tabIndex: 0, children: SP_JSX.jsxs(FocusGroup, { direction: "column", style: styles.stack, children: [view === "settings" && (SP_JSX.jsxs(FocusGroup, { direction: "row", style: styles.topBar, children: [SP_JSX.jsx("div", { style: styles.titleBlock, children: SP_JSX.jsx("div", { style: styles.title, children: t("weatherSettings") }) }), SP_JSX.jsx(Button, { iconOnly: true, onClick: () => setView("weather"), children: SP_JSX.jsx(FiX, {}) })] })), view === "weather" ? (SP_JSX.jsx(WeatherView, { error: error, forecastIndex: forecastIndex, language: language, loading: loading, moveForecast: moveForecast, onRefresh: () => loadWeather(settings), onSettings: () => setView("settings"), saving: saving, selectedForecast: selectedForecast, settings: settings, t: t, weather: weather })) : (SP_JSX.jsx(SettingsView, { draftLocation: draftLocation, error: error, language: language, loading: loading, onApplyLocation: applyLocation, onDraftLocationChange: (event) => setDraftLocation(event.currentTarget.value), onRefresh: () => loadWeather(settings), onToggleCompact: () => persistSettings({ ...settings, compact: !settings.compact }, false), onUnitsChange: (units) => persistSettings({ ...settings, units }, true), saving: saving, settings: settings, t: t, weather: weather }))] }) }));
+    return (SP_JSX.jsx(DeckyFocusable, { "flow-children": "column", onKeyDown: handleKeyDown, style: styles.shell, tabIndex: 0, children: SP_JSX.jsxs(FocusGroup, { direction: "column", style: styles.stack, children: [view === "settings" && (SP_JSX.jsxs(FocusGroup, { direction: "row", style: styles.topBar, children: [SP_JSX.jsx("div", { style: styles.titleBlock, children: SP_JSX.jsx("div", { style: styles.title, children: t("weatherSettings") }) }), SP_JSX.jsx(Button, { iconOnly: true, onClick: () => setView("weather"), children: SP_JSX.jsx(FiX, {}) })] })), view === "weather" ? (SP_JSX.jsx(WeatherView, { error: error, forecastIndex: forecastIndex, language: language, loading: loading, moveForecast: moveForecast, onRefresh: () => loadWeather(settings), onSettings: () => setView("settings"), saving: saving, selectedForecast: selectedForecast, settings: settings, t: t, weather: weather })) : (SP_JSX.jsx(SettingsView, { draftLocation: draftLocation, error: error, language: language, loading: loading, onApplyLocation: applyLocation, onDraftLocationChange: (event) => setDraftLocation(event.currentTarget.value), onRefresh: () => loadWeather(settings), onToggleCompact: () => persistSettings({ ...settings, compact: !settings.compact }, false), onToggleTopbarLeft: () => persistSettings({ ...settings, topbar_left: !settings.topbar_left }, false), onToggleTopbarWeather: () => persistSettings({ ...settings, topbar_enabled: !settings.topbar_enabled }, false), onUnitsChange: (units) => persistSettings({ ...settings, units }, true), saving: saving, settings: settings, t: t, weather: weather }))] }) }));
 }
 function WeatherView({ error, forecastIndex, language, loading, moveForecast, onRefresh, onSettings, saving, selectedForecast, settings, t, weather, }) {
     const [lift, setLift] = SP_REACT.useState(false);
@@ -1547,8 +1558,8 @@ function Status({ children, danger }) {
 function PluginIcon() {
     return SP_JSX.jsx(FiSun, {});
 }
-function SettingsView({ draftLocation, error, language, loading, onApplyLocation, onDraftLocationChange, onRefresh, onToggleCompact, onUnitsChange, saving, settings, t, weather, }) {
-    return (SP_JSX.jsxs(SP_JSX.Fragment, { children: [SP_JSX.jsxs("div", { style: styles.card, children: [SP_JSX.jsxs("div", { children: [SP_JSX.jsx("div", { style: styles.fieldLabel, children: t("location") }), SP_JSX.jsx(FocusTextInput, { ariaLabel: t("weatherLocation"), disabled: saving, onChange: onDraftLocationChange, onSubmit: onApplyLocation, placeholder: t("locationPlaceholder"), value: draftLocation })] }), SP_JSX.jsxs(Button, { disabled: saving || !draftLocation.trim(), selected: true, onClick: onApplyLocation, children: [SP_JSX.jsx(FiMapPin, {}), " ", t("saveLocation")] })] }), SP_JSX.jsxs("div", { style: styles.card, children: [SP_JSX.jsx("div", { style: styles.fieldLabel, children: t("unitsAndLayout") }), SP_JSX.jsxs(FocusGroup, { direction: "row", style: styles.actions, children: [SP_JSX.jsx(Button, { selected: settings.units === "metric", disabled: saving, onClick: () => onUnitsChange("metric"), children: `${DEGREE}C` }), SP_JSX.jsx(Button, { selected: settings.units === "imperial", disabled: saving, onClick: () => onUnitsChange("imperial"), children: `${DEGREE}F` })] }), SP_JSX.jsx(Button, { selected: settings.compact, disabled: saving, onClick: onToggleCompact, children: t("compactLayout") })] }), SP_JSX.jsx(Status, { danger: Boolean(error), children: error
+function SettingsView({ draftLocation, error, language, loading, onApplyLocation, onDraftLocationChange, onRefresh, onToggleCompact, onToggleTopbarLeft, onToggleTopbarWeather, onUnitsChange, saving, settings, t, weather, }) {
+    return (SP_JSX.jsxs(SP_JSX.Fragment, { children: [SP_JSX.jsxs("div", { style: styles.card, children: [SP_JSX.jsxs("div", { children: [SP_JSX.jsx("div", { style: styles.fieldLabel, children: t("location") }), SP_JSX.jsx(FocusTextInput, { ariaLabel: t("weatherLocation"), disabled: saving, onChange: onDraftLocationChange, onSubmit: onApplyLocation, placeholder: t("locationPlaceholder"), value: draftLocation })] }), SP_JSX.jsxs(Button, { disabled: saving || !draftLocation.trim(), selected: true, onClick: onApplyLocation, children: [SP_JSX.jsx(FiMapPin, {}), " ", t("saveLocation")] })] }), SP_JSX.jsxs("div", { style: styles.card, children: [SP_JSX.jsx("div", { style: styles.fieldLabel, children: t("unitsAndLayout") }), SP_JSX.jsxs(FocusGroup, { direction: "row", style: styles.actions, children: [SP_JSX.jsx(Button, { selected: settings.units === "metric", disabled: saving, onClick: () => onUnitsChange("metric"), children: `${DEGREE}C` }), SP_JSX.jsx(Button, { selected: settings.units === "imperial", disabled: saving, onClick: () => onUnitsChange("imperial"), children: `${DEGREE}F` })] }), SP_JSX.jsx(Button, { selected: settings.compact, disabled: saving, onClick: onToggleCompact, children: t("compactLayout") }), SP_JSX.jsx(Button, { selected: settings.topbar_enabled, disabled: saving, onClick: onToggleTopbarWeather, children: t("topBarWeather") }), SP_JSX.jsx(Button, { selected: settings.topbar_left, disabled: saving || !settings.topbar_enabled, onClick: onToggleTopbarLeft, children: t("topBarLeft") })] }), SP_JSX.jsx(Status, { danger: Boolean(error), children: error
                     ? error
                     : weather
                         ? `${t("active")}: ${weather.location} ${MIDDOT} ${formatUpdatedAt(weather.updated_at, language)}`
@@ -1559,6 +1570,7 @@ var index = definePlugin(() => ({
     titleView: SP_JSX.jsx("div", { className: DFL.staticClasses.Title, children: "Weather" }),
     content: SP_JSX.jsx(Content, {}),
     icon: SP_JSX.jsx(PluginIcon, {}),
+    alwaysRender: true,
 }));
 
 export { index as default };

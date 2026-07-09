@@ -1,6 +1,6 @@
 {
   "name": "Weather",
-  "author": "sgarr",
+  "author": "LoZazaMastro",
   "flags": [],
   "api_version": 1,
   "publish": {
@@ -10,7 +10,8 @@
       "minimal",
       "qam"
     ],
-    "description": "A compact weather panel for Decky Loader, made for Steam Big Picture and controller navigation.",
+    "description": "A compact weather panel for Decky Loader, with optional current weather next to the Steam top-bar clock.",
     "image": ""
-  }
+  },
+  "version": "2.0.0"
 }

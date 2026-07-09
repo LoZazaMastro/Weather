@@ -1,7 +1,7 @@
 {
   "name": "decky-weather",
-  "version": "1.0.0",
-  "description": "A compact, controller-friendly weather plugin for Decky Loader.",
+  "version": "2.0.0",
+  "description": "A compact, controller-friendly weather plugin for Decky Loader with optional top-bar weather.",
   "type": "module",
   "scripts": {
     "build": "rollup -c",
@@ -14,7 +14,7 @@
     "steam-deck",
     "steam-big-picture"
   ],
-  "author": "sgarr",
+  "author": "LoZazaMastro",
   "license": "MIT",
   "devDependencies": {
     "@decky/rollup": "^1.0.2",
