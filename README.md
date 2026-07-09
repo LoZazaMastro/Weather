@@ -4,6 +4,8 @@ Weather is a compact Decky Loader plugin that brings current weather, daily fore
 
 It is built for Steam Big Picture and controller navigation, with a narrow QAM-safe layout that avoids clipped text and awkward overflow.
 
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/cd3a0779-97cd-40f5-b3be-15f9915f1a2f" />
+
 ## Features
 
 - Current weather, 5-day forecast, and the next 24 hours.
