@@ -1,0 +1,39 @@
+name: Playhub TV source diagnostic
+
+on:
+  push:
+    branches: [playhub-tv-private-build]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout staging tools
+        uses: actions/checkout@v4
+        with:
+          path: staging
+      - name: Checkout pristine Aurora 1.1.5 source
+        uses: actions/checkout@v4
+        with:
+          repository: GuiDev1994/aurora-tv
+          ref: v1.1.5
+          submodules: recursive
+          path: aurora-src
+      - name: Inspect source layout and UI candidates
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd aurora-src
+          echo '=== SOURCE FILES ==='
+          find src deploy cmake scripts -type f | sort
+          echo '=== AURORA USER-FACING STRINGS ==='
+          grep -RIn --exclude-dir=.git --exclude='*.png' --exclude='*.jpg' --exclude='*.mo' -E 'Aurora TV|Aurora' src deploy | head -400 || true
+          echo '=== UI/CARD/GRID/COVER CANDIDATES ==='
+          grep -RIn --include='*.c' --include='*.h' -E 'grid|tile|cover|poster|app_image|app.*width|app.*height|LV_COLOR|lv_color_hex|bg_color|bg_opa|radius|border' src/app | head -1200 || true
+          echo '=== DEPLOY ASSETS ==='
+          find deploy/webos -maxdepth 2 -type f -printf '%p %s bytes\n' | sort
