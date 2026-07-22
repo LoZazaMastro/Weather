@@ -104,7 +104,9 @@ jobs:
           RESULT=/tmp/playhub-tv-result
           mkdir -p "$RESULT"
 
-          SOURCE_IPK="aurora-src/dist/com.aurora.gamestream_${PLAYHUB_VERSION}_arm.ipk"
+          find aurora-src/dist -maxdepth 1 -type f -printf '%f %s bytes\n' | sort | tee "$RESULT/Build-Verification.txt"
+          SOURCE_IPK=$(find aurora-src/dist -maxdepth 1 -type f -name '*.ipk' | head -1)
+          test -n "$SOURCE_IPK"
           test -s "$SOURCE_IPK"
           cp "$SOURCE_IPK" "$RESULT/Playhub-TV_${PLAYHUB_VERSION}_arm.ipk"
 
@@ -130,7 +132,8 @@ jobs:
 
           # Inspect the produced IPK rather than trusting the filename.
           IPK="$RESULT/Playhub-TV_${PLAYHUB_VERSION}_arm.ipk"
-          file "$IPK" | tee "$RESULT/Build-Verification.txt"
+          file "$IPK" | tee -a "$RESULT/Build-Verification.txt"
+          rm -rf /tmp/playhub-ipk-inspect
           mkdir -p /tmp/playhub-ipk-inspect
           (
             cd /tmp/playhub-ipk-inspect
@@ -139,13 +142,15 @@ jobs:
             test -n "$DATA_ARCHIVE"
             tar -xaf "$DATA_ARCHIVE"
             APPINFO=$(find . -type f -name appinfo.json | head -1)
+            BIN=$(find . -type f -path '*/bin/aurora' | head -1)
             test -n "$APPINFO"
+            test -n "$BIN"
+            test -s "$BIN"
             jq -e '.id == "com.aurora.gamestream"' "$APPINFO"
             jq -e '.version == "1.2.0"' "$APPINFO"
             jq -e '.title == "Playhub TV"' "$APPINFO"
             jq -e '.dialAppName == "Playhub TV"' "$APPINFO"
-            test -x ./bin/aurora
-            file ./bin/aurora
+            file "$BIN" | tee -a "$RESULT/Build-Verification.txt"
             printf '\nPackaged appinfo.json:\n' >> "$RESULT/Build-Verification.txt"
             cat "$APPINFO" >> "$RESULT/Build-Verification.txt"
           )
@@ -165,6 +170,7 @@ jobs:
           ls -lh "$RESULT" >> "$RESULT/Build-Verification.txt"
 
       - name: Upload Playhub TV packages
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: Playhub-TV-1.2.0
