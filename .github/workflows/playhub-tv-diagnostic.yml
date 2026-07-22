@@ -1,8 +1,6 @@
 name: Playhub TV source diagnostic
 
 on:
-  push:
-    branches: [playhub-tv-private-build]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -26,16 +24,20 @@ jobs:
           ref: v1.1.5
           submodules: recursive
           path: aurora-src
-      - name: Inspect source layout and UI candidates
+      - name: Inspect focused UI candidates
         shell: bash
         run: |
           set -euo pipefail
           cd aurora-src
-          echo '=== SOURCE FILES ==='
-          find src deploy cmake scripts -type f | sort
-          echo '=== AURORA USER-FACING STRINGS ==='
-          grep -RIn --exclude-dir=.git --exclude='*.png' --exclude='*.jpg' --exclude='*.mo' -E 'Aurora TV|Aurora' src deploy | head -400 || true
-          echo '=== UI/CARD/GRID/COVER CANDIDATES ==='
-          grep -RIn --include='*.c' --include='*.h' -E 'grid|tile|cover|poster|app_image|app.*width|app.*height|LV_COLOR|lv_color_hex|bg_color|bg_opa|radius|border' src/app | head -1200 || true
+          echo '=== TOP-LEVEL APP FILES ==='
+          find src/app -maxdepth 3 -type f | sort | sed -n '1,220p'
+          echo '=== USER-FACING AURORA STRINGS ==='
+          grep -RIn --exclude-dir=.git --exclude='*.png' --exclude='*.jpg' --exclude='*.mo' -E 'Aurora TV|Aurora' src deploy | sed -n '1,160p' || true
+          echo '=== HOME/GRID/TILE/COVER FILES ==='
+          grep -RIl --include='*.c' --include='*.h' -E 'grid|tile|cover|poster|app_image|app.*width|app.*height' src/app | sort | sed -n '1,120p' || true
+          echo '=== COLOR STYLE FILES ==='
+          grep -RIl --include='*.c' --include='*.h' -E 'lv_color_hex|bg_color|bg_opa|radius|border' src/app | sort | sed -n '1,120p' || true
+          echo '=== SELECTED MATCHES ==='
+          grep -RIn --include='*.c' --include='*.h' -E 'grid|tile|cover|poster|lv_color_hex|bg_color|bg_opa|radius|border' src/app | sed -n '1,260p' || true
           echo '=== DEPLOY ASSETS ==='
           find deploy/webos -maxdepth 2 -type f -printf '%p %s bytes\n' | sort
