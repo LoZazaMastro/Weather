@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/runner/work/Weather/Weather/staging/playhub-tv-build/prepare.py", line 287, in <module>
+    generate_assets()
+  File "/home/runner/work/Weather/Weather/staging/playhub-tv-build/prepare.py", line 164, in generate_assets
+    save_like(deploy / "icon.png", make_square_icon(wordmark, 130))
+  File "/home/runner/work/Weather/Weather/staging/playhub-tv-build/prepare.py", line 96, in make_square_icon
+    background.alpha_composite(contain(mark, (size, size), max(6, size // 7)))
+  File "/home/runner/work/Weather/Weather/staging/playhub-tv-build/prepare.py", line 66, in contain
+    src.thumbnail((max_w, max_h), Image.Resampling.LANCZOS)
+  File "/usr/lib/python3/dist-packages/PIL/Image.py", line 65, in __getattr__
+    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
+AttributeError: module 'PIL.Image' has no attribute 'Resampling'
+
+Exit status: 1
