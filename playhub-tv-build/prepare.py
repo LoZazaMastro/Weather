@@ -16,6 +16,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 VERSION = "1.2.0"
 ACCENT = (238, 204, 0, 255)  # #EECC00
+RESAMPLE_LANCZOS = getattr(Image, "Resampling", Image).LANCZOS
 ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path.cwd().resolve()
 LOGO_PATH = Path(sys.argv[2]).resolve() if len(sys.argv) > 2 else ROOT / "playhub-logo.png"
 
@@ -63,7 +64,7 @@ def contain(image: Image.Image, size: tuple[int, int], pad: int = 0) -> Image.Im
     max_w = max(1, size[0] - pad * 2)
     max_h = max(1, size[1] - pad * 2)
     src = image.convert("RGBA")
-    src.thumbnail((max_w, max_h), Image.Resampling.LANCZOS)
+    src.thumbnail((max_w, max_h), RESAMPLE_LANCZOS)
     x = (size[0] - src.width) // 2
     y = (size[1] - src.height) // 2
     canvas.alpha_composite(src, (x, y))
