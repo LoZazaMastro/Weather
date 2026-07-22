@@ -24,20 +24,29 @@ jobs:
           ref: v1.1.5
           submodules: recursive
           path: aurora-src
-      - name: Inspect focused UI candidates
+      - name: Write focused source diagnostic
         shell: bash
         run: |
           set -euo pipefail
           cd aurora-src
-          echo '=== TOP-LEVEL APP FILES ==='
-          find src/app -maxdepth 3 -type f | sort | sed -n '1,220p'
-          echo '=== USER-FACING AURORA STRINGS ==='
-          grep -RIn --exclude-dir=.git --exclude='*.png' --exclude='*.jpg' --exclude='*.mo' -E 'Aurora TV|Aurora' src deploy | sed -n '1,160p' || true
-          echo '=== HOME/GRID/TILE/COVER FILES ==='
-          grep -RIl --include='*.c' --include='*.h' -E 'grid|tile|cover|poster|app_image|app.*width|app.*height' src/app | sort | sed -n '1,120p' || true
-          echo '=== COLOR STYLE FILES ==='
-          grep -RIl --include='*.c' --include='*.h' -E 'lv_color_hex|bg_color|bg_opa|radius|border' src/app | sort | sed -n '1,120p' || true
-          echo '=== SELECTED MATCHES ==='
-          grep -RIn --include='*.c' --include='*.h' -E 'grid|tile|cover|poster|lv_color_hex|bg_color|bg_opa|radius|border' src/app | sed -n '1,260p' || true
-          echo '=== DEPLOY ASSETS ==='
-          find deploy/webos -maxdepth 2 -type f -printf '%p %s bytes\n' | sort
+          {
+            echo '=== TOP-LEVEL APP FILES ==='
+            find src/app -maxdepth 3 -type f | sort | sed -n '1,260p'
+            echo '=== USER-FACING AURORA STRINGS ==='
+            grep -RIn --exclude-dir=.git --exclude='*.png' --exclude='*.jpg' --exclude='*.mo' -E 'Aurora TV|Aurora' src deploy | sed -n '1,220p' || true
+            echo '=== HOME/GRID/TILE/COVER FILES ==='
+            grep -RIl --include='*.c' --include='*.h' -E 'grid|tile|cover|poster|app_image|app.*width|app.*height' src/app | sort | sed -n '1,180p' || true
+            echo '=== COLOR STYLE FILES ==='
+            grep -RIl --include='*.c' --include='*.h' -E 'lv_color_hex|bg_color|bg_opa|radius|border' src/app | sort | sed -n '1,180p' || true
+            echo '=== SELECTED MATCHES ==='
+            grep -RIn --include='*.c' --include='*.h' -E 'grid|tile|cover|poster|lv_color_hex|bg_color|bg_opa|radius|border' src/app | sed -n '1,500p' || true
+            echo '=== DEPLOY ASSETS ==='
+            find deploy/webos -maxdepth 2 -type f -printf '%p %s bytes\n' | sort
+          } > ../playhub-tv-source-diagnostic.txt
+      - name: Upload source diagnostic
+        uses: actions/upload-artifact@v4
+        with:
+          name: playhub-tv-source-diagnostic
+          path: playhub-tv-source-diagnostic.txt
+          if-no-files-found: error
+          retention-days: 1
