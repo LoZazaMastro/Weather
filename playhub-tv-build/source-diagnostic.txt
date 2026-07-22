@@ -1,0 +1,841 @@
+=== TOP-LEVEL APP FILES ===
+src/app/CMakeLists.txt
+src/app/app.c
+src/app/app.h
+src/app/app_error.c
+src/app/app_error.h
+src/app/app_launch.c
+src/app/app_launch.h
+src/app/app_session.c
+src/app/app_session.h
+src/app/app_settings.c
+src/app/app_settings.h
+src/app/backend/CMakeLists.txt
+src/app/backend/apploader/apploader.c
+src/app/backend/apploader/apploader.h
+src/app/backend/backend_gs.c
+src/app/backend/backend_root.c
+src/app/backend/backend_root.h
+src/app/backend/pcmanager.h
+src/app/backend/pcmanager/CMakeLists.txt
+src/app/backend/pcmanager/discovery_callback.c
+src/app/backend/pcmanager/known_hosts.c
+src/app/backend/pcmanager/known_hosts.h
+src/app/backend/pcmanager/listeners.c
+src/app/backend/pcmanager/listeners.h
+src/app/backend/pcmanager/pairing.c
+src/app/backend/pcmanager/pclist.c
+src/app/backend/pcmanager/pclist.h
+src/app/backend/pcmanager/pcmanager.c
+src/app/backend/pcmanager/pcmanager_common.c
+src/app/backend/pcmanager/priv.h
+src/app/backend/types.h
+src/app/config.h.in
+src/app/input/CMakeLists.txt
+src/app/input/app_input.c
+src/app/input/app_input.h
+src/app/input/input_event.c
+src/app/input/input_gamepad.c
+src/app/input/input_gamepad.h
+src/app/input/input_gamepad_mapping.c
+src/app/input/input_gamepad_mapping.h
+src/app/lvgl/CMakeLists.txt
+src/app/lvgl/ext/lv_child_group.c
+src/app/lvgl/ext/lv_child_group.h
+src/app/lvgl/font/font_empty.c
+src/app/lvgl/font/lv_symbol_def_replace.h
+src/app/lvgl/font/material_icons_regular_symbols.h
+src/app/lvgl/input/CMakeLists.txt
+src/app/lvgl/input/lv_drv_sdl_key.c
+src/app/lvgl/input/lv_drv_sdl_key.h
+src/app/lvgl/input/lv_sdl_drv_button_input.c
+src/app/lvgl/input/lv_sdl_drv_pointer_input.c
+src/app/lvgl/input/lv_sdl_drv_wheel_input.c
+src/app/lvgl/lv_conf.h
+src/app/lvgl/lv_disp_drv_app.c
+src/app/lvgl/lv_disp_drv_app.h
+src/app/lvgl/lv_ext_utils.c
+src/app/lvgl/lv_ext_utils.h
+src/app/lvgl/lv_sdl_drv_input.h
+src/app/lvgl/theme/lv_theme_moonlight.c
+src/app/lvgl/theme/lv_theme_moonlight.h
+src/app/lvgl/theme/lv_theme_moonlight_colors.h
+src/app/lvgl/util/lv_app_utils.c
+src/app/lvgl/util/lv_app_utils.h
+src/app/platform/CMakeLists.txt
+src/app/platform/common/CMakeLists.txt
+src/app/platform/common/app_common.c
+src/app/platform/common/app_wakelock_common.c
+src/app/platform/common/i18n_common.c
+src/app/platform/common/i18n_gettext.c
+src/app/platform/sdl/bus.c
+src/app/platform/sdl/events.h
+src/app/platform/sdl/navkey_sdl.c
+src/app/platform/sdl/navkey_sdl.h
+src/app/platform/sdl/path_sdl.c
+src/app/platform/webos/CMakeLists.txt
+src/app/platform/webos/app_webos.c
+src/app/platform/webos/app_webos.h
+src/app/platform/webos/i18n_webos.c
+src/app/platform/webos/keyboard_webos.c
+src/app/platform/webos/navkey_sdl_webos.c
+src/app/platform/webos/path_webos.c
+src/app/platform/webos/pbnjson_compat.c
+src/app/platform/windows/os_info_windows.c
+src/app/profile/CMakeLists.txt
+src/app/profile/profile_manager.c
+src/app/profile/profile_manager.h
+src/app/res.h
+src/app/res/CMakeLists.txt
+src/app/res/branding/aurora_hero.png
+src/app/res/branding/aurora_icon.png
+src/app/res/branding/aurora_logo.png
+src/app/res/branding/aurora_splash.png
+src/app/res/branding/aurora_variants.png
+src/app/res/gen/defcover.h
+src/app/res/gen/fav_indicator.h
+src/app/res/gen/material_icons_regular_ttf.h
+src/app/res/gen/moonlight.h
+src/app/res/iconfonts/MaterialIcons-Regular.codepoints
+src/app/res/iconfonts/MaterialIcons-Regular.list
+src/app/res/iconfonts/MaterialIcons-Regular.ttf
+src/app/res/img/defcover.png
+src/app/res/img/fav_indicator.png
+src/app/res/img/moonlight.png
+src/app/res/res.c
+src/app/res/tools/.gitignore
+src/app/res/tools/.nvmrc
+src/app/res/tools/async-transform.ts
+src/app/res/tools/binheader.ts
+src/app/res/tools/codepoints.ts
+src/app/res/tools/gulp-subset-font.ts
+src/app/res/tools/gulpfile.ts
+src/app/res/tools/package-lock.json
+src/app/res/tools/package.json
+src/app/res/tools/symheader.ts
+src/app/res/tools/tsconfig.json
+src/app/stream/CMakeLists.txt
+src/app/stream/adaptive_bitrate.c
+src/app/stream/adaptive_bitrate.h
+src/app/stream/audio/CMakeLists.txt
+src/app/stream/audio/session_audio.c
+src/app/stream/audio/session_audio.h
+src/app/stream/connection/CMakeLists.txt
+src/app/stream/connection/session_connection.h
+src/app/stream/connection/session_connnection.c
+src/app/stream/embed_wrapper.c
+src/app/stream/embed_wrapper.h
+src/app/stream/input/CMakeLists.txt
+src/app/stream/input/keyboard_input.c
+src/app/stream/input/keyboard_input.h
+src/app/stream/input/session_evmouse.c
+src/app/stream/input/session_evmouse.h
+src/app/stream/input/session_gamepad.c
+src/app/stream/input/session_input.c
+src/app/stream/input/session_input.h
+src/app/stream/input/session_keyboard.c
+src/app/stream/input/session_mouse.c
+src/app/stream/input/session_pointer_gesture.c
+src/app/stream/input/session_pointer_gesture.h
+src/app/stream/input/session_touch.c
+src/app/stream/input/session_virt_mouse.c
+src/app/stream/input/session_virt_mouse.h
+src/app/stream/input/vk.h
+src/app/stream/session.c
+src/app/stream/session.h
+src/app/stream/session_events.c
+src/app/stream/session_events.h
+src/app/stream/session_priv.c
+src/app/stream/session_priv.h
+src/app/stream/session_worker.c
+src/app/stream/session_worker.h
+src/app/stream/session_worker_embedded.c
+src/app/stream/video/CMakeLists.txt
+src/app/stream/video/session_video.c
+src/app/stream/video/session_video.h
+src/app/ui/CMakeLists.txt
+src/app/ui/common/progress_dialog.c
+src/app/ui/common/progress_dialog.h
+src/app/ui/config.h
+src/app/ui/fatal_error.c
+src/app/ui/fatal_error.h
+src/app/ui/help/help.dialog.c
+src/app/ui/help/help.dialog.h
+src/app/ui/launcher/add.dialog.c
+src/app/ui/launcher/add.dialog.h
+src/app/ui/launcher/appitem.view.c
+src/app/ui/launcher/appitem.view.h
+src/app/ui/launcher/apps.controller.c
+src/app/ui/launcher/apps.controller.h
+src/app/ui/launcher/coverloader.c
+src/app/ui/launcher/coverloader.h
+src/app/ui/launcher/launcher.controller.c
+src/app/ui/launcher/launcher.controller.h
+src/app/ui/launcher/launcher.view.c
+src/app/ui/launcher/pair.dialog.c
+src/app/ui/launcher/pair.dialog.h
+src/app/ui/launcher/server.context_menu.c
+src/app/ui/launcher/server.context_menu.h
+src/app/ui/launcher/server.popup.c
+src/app/ui/launcher/server.popup.h
+src/app/ui/messages.h
+src/app/ui/root.c
+src/app/ui/root.h
+src/app/ui/settings/CMakeLists.txt
+src/app/ui/settings/settings.controller.c
+src/app/ui/settings/settings.controller.h
+src/app/ui/settings/settings.view.c
+src/app/ui/streaming/hints.c
+src/app/ui/streaming/hints.h
+src/app/ui/streaming/soft_keyboard.c
+src/app/ui/streaming/soft_keyboard.h
+src/app/ui/streaming/streaming.controller.c
+src/app/ui/streaming/streaming.controller.h
+src/app/ui/streaming/streaming.view.c
+src/app/ui/ui_input.c
+src/app/ui/ui_input.h
+src/app/util/CMakeLists.txt
+src/app/util/bus.h
+src/app/util/compat.h
+src/app/util/font.c
+src/app/util/font.h
+src/app/util/i18n.h
+src/app/util/img_loader.c
+src/app/util/img_loader.h
+src/app/util/ini_ext.h
+src/app/util/navkey.h
+src/app/util/nullable.c
+src/app/util/nullable.h
+src/app/util/path.c
+src/app/util/path.h
+src/app/util/user_event.h
+=== USER-FACING AURORA STRINGS ===
+src/i18n/ro/messages.po:41:msgid "Quit Aurora?"
+src/i18n/ro/messages.po:313:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/i18n/nl/messages.po:41:msgid "Quit Aurora?"
+src/i18n/nl/messages.po:320:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/i18n/cs/messages.po:41:msgid "Quit Aurora?"
+src/i18n/cs/messages.po:321:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/i18n/pt-BR/messages.po:41:msgid "Quit Aurora?"
+src/i18n/pt-BR/messages.po:42:msgstr "Sair do Aurora?"
+src/i18n/pt-BR/messages.po:322:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/i18n/pt-BR/messages.po:642:msgid "No HID gamepads visible to Aurora"
+src/i18n/pt-BR/messages.po:643:msgstr "Nenhum gamepad HID visível para o Aurora"
+src/i18n/it/messages.po:41:msgid "Quit Aurora?"
+src/i18n/it/messages.po:313:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/i18n/ko/messages.po:41:msgid "Quit Aurora?"
+src/i18n/ko/messages.po:313:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/i18n/de/messages.po:41:msgid "Quit Aurora?"
+src/i18n/de/messages.po:315:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/i18n/zh-TW/messages.po:41:msgid "Quit Aurora?"
+src/i18n/zh-TW/messages.po:313:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/i18n/uk/messages.po:41:msgid "Quit Aurora?"
+src/i18n/uk/messages.po:313:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/i18n/tr/messages.po:41:msgid "Quit Aurora?"
+src/i18n/tr/messages.po:313:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/i18n/fr/messages.po:41:msgid "Quit Aurora?"
+src/i18n/fr/messages.po:321:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/i18n/zh-CN/messages.po:41:msgid "Quit Aurora?"
+src/i18n/zh-CN/messages.po:322:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/i18n/ru/messages.po:41:msgid "Quit Aurora?"
+src/i18n/ru/messages.po:315:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/i18n/ja/messages.po:41:msgid "Quit Aurora?"
+src/i18n/ja/messages.po:314:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/i18n/es-ES/messages.po:41:msgid "Quit Aurora?"
+src/i18n/es-ES/messages.po:313:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/i18n/messages.pot:41:msgid "Quit Aurora?"
+src/i18n/messages.pot:212:"(If your device supports moonlight-embedded, install it and Aurora will "
+src/i18n/messages.pot:324:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/i18n/messages.pot:432:"Note: Some games can enforce a larger deadzone than what Aurora is "
+src/i18n/messages.pot:708:msgid "No HID gamepads visible to Aurora"
+src/i18n/pl/messages.po:41:msgid "Quit Aurora?"
+src/i18n/pl/messages.po:313:msgid "Aurora uses moonlight-embedded to select a suitable decoder automatically."
+src/app/ui/launcher/launcher.controller.c:342:// when Aurora stays alive in the background and the user switches back to it on the TV.
+src/app/ui/launcher/launcher.controller.c:352:    // genuine background->foreground switch (e.g. webOS Home -> back to Aurora).
+src/app/ui/launcher/launcher.controller.c:636:                                             "and Aurora will use it automatically.)"));
+src/app/ui/launcher/launcher.controller.h:27:    /* Top-bar (formerly the side nav). Contains logo + Aurora label on the left,
+src/app/ui/streaming/soft_keyboard.c:3: * Layers: alphabetic (abc) and symbols (&123). F1-F12 row. Aurora theme colors.
+src/app/ui/settings/panes/input.pane.c:80:                                 "than what Aurora is configured to use."),
+src/app/ui/settings/panes/av_pane.c:29:        lv_label_set_text(hint, locstr("Aurora uses moonlight-embedded to select a suitable decoder automatically."));
+src/app/ui/root.c:330:    SDL_Window *win = SDL_CreateWindow("Aurora", win_x, win_y, win_width, win_height, win_flags);
+src/app/stream/audio/session_audio.c:52:            .appName = "Aurora",
+src/app/app.c:46:    commons_log_info("APP", "Start Aurora. Version %s", APP_VERSION);
+src/app/app.c:151:             * cold-start auto-resume is one-shot; switching away and back to Aurora on
+src/app/app.c:295:    lv_obj_t *mbox = lv_msgbox_create_i18n(NULL, NULL, locstr("Quit Aurora?"), btn_txts, false);
+src/app/app.c:360:    cec_sdl_init(&app->cec, "Aurora");
+deploy/linux/moonlight-tv.desktop:4:Name=Aurora
+deploy/webosbrew/com.aurora.gamestream.yml:4:title: Aurora
+deploy/webosbrew/com.aurora.gamestream.yml:11:  **Aurora** is a fork of [Moonlight TV](https://github.com/mariotaku/moonlight-tv) for LG webOS (C1–C5 and similar),
+deploy/webos/appinfo.json:4:    "vendor": "Aurora",
+deploy/webos/appinfo.json:7:    "title": "Aurora",
+deploy/webos/appinfo.json:12:    "dialAppName": "Aurora",
+deploy/webos/appinfo.json:13:    "appDescription": "Aurora \u2014 GameStream client for LG webOS. Stream from your PC with Sunshine or NVIDIA GameStream at up to 4K 120Hz HDR.",
+deploy/steamlink/toc.txt:1:name=Aurora
+=== HOME/GRID/TILE/COVER FILES ===
+src/app/app_settings.c
+src/app/app_settings.h
+src/app/backend/pcmanager.h
+src/app/backend/pcmanager/discovery/discovery.c
+src/app/backend/pcmanager/discovery/discovery.h
+src/app/backend/pcmanager/discovery/impl/dnssd.c
+src/app/backend/pcmanager/discovery/impl/impl.h
+src/app/backend/pcmanager/discovery/impl/microdns.c
+src/app/backend/pcmanager/discovery/throttle.c
+src/app/backend/pcmanager/discovery/throttle.h
+src/app/backend/pcmanager/discovery_callback.c
+src/app/backend/pcmanager/pcmanager.c
+src/app/backend/pcmanager/priv.h
+src/app/lvgl/input/lv_sdl_drv_wheel_input.c
+src/app/lvgl/lv_disp_drv_app.c
+src/app/lvgl/lv_disp_drv_app.h
+src/app/res.h
+src/app/res/gen/defcover.h
+src/app/res/res.c
+src/app/stream/adaptive_bitrate.c
+src/app/stream/adaptive_bitrate.h
+src/app/stream/session.c
+src/app/stream/session.h
+src/app/stream/session_worker.c
+src/app/stream/video/session_video.c
+src/app/ui/launcher/add.dialog.c
+src/app/ui/launcher/appitem.view.c
+src/app/ui/launcher/apps.controller.c
+src/app/ui/launcher/apps.controller.h
+src/app/ui/launcher/coverloader.c
+src/app/ui/launcher/coverloader.h
+src/app/ui/launcher/launcher.controller.c
+src/app/ui/launcher/launcher.view.c
+src/app/ui/launcher/server.popup.h
+src/app/ui/root.c
+src/app/ui/root.h
+src/app/ui/settings/panes/about.pane.c
+src/app/ui/settings/panes/basic.pane.c
+src/app/ui/settings/panes/pref_obj.c
+src/app/ui/settings/panes/video.pane.c
+src/app/ui/settings/settings.controller.c
+src/app/ui/settings/settings.view.c
+=== COLOR STYLE FILES ===
+src/app/lvgl/lv_conf.h
+src/app/lvgl/theme/lv_theme_moonlight.c
+src/app/lvgl/theme/lv_theme_moonlight_colors.h
+src/app/ui/help/help.dialog.c
+src/app/ui/launcher/appitem.view.c
+src/app/ui/launcher/apps.controller.c
+src/app/ui/launcher/coverloader.c
+src/app/ui/launcher/launcher.view.c
+src/app/ui/launcher/server.popup.c
+src/app/ui/root.c
+src/app/ui/settings/panes/pref_obj.c
+src/app/ui/settings/settings.controller.c
+src/app/ui/settings/settings.view.c
+src/app/ui/streaming/soft_keyboard.c
+src/app/ui/streaming/streaming.controller.c
+src/app/ui/streaming/streaming.view.c
+=== SELECTED MATCHES ===
+src/app/ui/launcher/launcher.controller.c:19:#include "lv_gridview.h"
+src/app/ui/launcher/launcher.controller.c:213:    pcmanager_auto_discovery_start(pcmanager);
+src/app/ui/launcher/launcher.controller.c:239:    pcmanager_auto_discovery_stop(pcmanager);
+src/app/ui/launcher/launcher.controller.c:568:            if (lv_obj_check_type(cur, &lv_gridview_class)) {
+src/app/ui/launcher/launcher.controller.c:569:                int index = lv_gridview_get_focused_index(cur);
+src/app/ui/launcher/launcher.controller.c:573:                lv_gridview_focus(cur, index);
+src/app/ui/launcher/launcher.controller.c:574:                /* lv_gridview_focus() sends its FOCUSED event via
+src/app/ui/launcher/launcher.controller.c:578:                 * genuine keypad/encoder indev, so the tile ends up
+src/app/ui/launcher/launcher.controller.c:579:                 * "focused" internally (grid->focused_index is correct) but
+src/app/ui/launcher/launcher.controller.c:581:                 * state directly, same as the non-gridview branch below
+src/app/ui/launcher/launcher.controller.c:583:                lv_obj_t *focused_item = lv_gridview_get_item_view(cur, index);
+src/app/ui/launcher/launcher.view.c:74:    /* Shell: top bar + game grid (column layout, no overlay). */
+src/app/ui/launcher/launcher.view.c:86:    /* Two focus groups: nav_group for top-bar buttons, detail_group for game grid items. */
+src/app/ui/launcher/launcher.view.c:92:    lv_style_set_radius(&controller->topbar_btn_style, LV_RADIUS_CIRCLE);
+src/app/ui/launcher/launcher.view.c:94:    lv_style_set_border_width(&controller->topbar_btn_style, 0);
+src/app/ui/launcher/launcher.view.c:95:    lv_style_set_bg_color(&controller->topbar_btn_style, ml_color_hex(ML_COLOR_SURFACE_ALT));
+src/app/ui/launcher/launcher.view.c:96:    lv_style_set_bg_opa(&controller->topbar_btn_style, LV_OPA_COVER);
+src/app/ui/launcher/launcher.view.c:107:    lv_obj_set_style_bg_color(topbar, lv_color_black(), 0);
+src/app/ui/launcher/launcher.view.c:108:    lv_obj_set_style_bg_opa(topbar, LV_OPA_COVER, 0);
+src/app/ui/launcher/launcher.view.c:109:    lv_obj_set_style_border_width(topbar, 0, 0);
+src/app/ui/launcher/launcher.view.c:146:    lv_obj_set_style_radius(server_btn, LV_DPX(12), 0);
+src/app/ui/launcher/launcher.view.c:147:    lv_obj_set_style_bg_color(server_btn, ml_color_hex(ML_COLOR_SURFACE_ALT), 0);
+src/app/ui/launcher/launcher.view.c:148:    lv_obj_set_style_bg_opa(server_btn, LV_OPA_70, 0);
+src/app/ui/launcher/launcher.view.c:178:    /* ---------------- Game grid (fills remaining space below top bar) ---------------- */
+src/app/ui/launcher/launcher.view.c:190:    lv_obj_set_style_bg_color(detail, lv_color_black(), 0);
+src/app/ui/launcher/launcher.view.c:191:    lv_obj_set_style_bg_opa(detail, LV_OPA_COVER, 0);
+src/app/ui/launcher/launcher.view.c:192:    lv_obj_set_style_border_width(detail, 0, 0);
+src/app/ui/launcher/launcher.view.c:195:    /* Settings overlay: floats over the game grid, below the top bar. */
+src/app/ui/launcher/launcher.view.c:200:    lv_obj_set_style_bg_opa(settings_layer, LV_OPA_TRANSP, 0);
+src/app/ui/launcher/launcher.view.c:221:    lv_obj_set_style_bg_opa(btn, LV_OPA_70, 0);
+src/app/ui/launcher/add.dialog.c:53:    lv_obj_set_grid_dsc_array(content, col_dsc, row_dsc);
+src/app/ui/launcher/add.dialog.c:56:    lv_obj_set_grid_cell(ip_label, LV_GRID_ALIGN_START, 0, 3, LV_GRID_ALIGN_STRETCH, 0, 1);
+src/app/ui/launcher/add.dialog.c:61:    lv_obj_set_grid_cell(ip_input, LV_GRID_ALIGN_STRETCH, 0, 3, LV_GRID_ALIGN_STRETCH, 1, 1);
+src/app/ui/launcher/add.dialog.c:72:    lv_obj_set_grid_cell(add_progress, LV_GRID_ALIGN_CENTER, 1, 1, LV_GRID_ALIGN_CENTER, 1, 1);
+src/app/ui/launcher/add.dialog.c:79:    lv_obj_set_grid_cell(add_error, LV_GRID_ALIGN_START, 0, 3, LV_GRID_ALIGN_STRETCH, 2, 1);
+src/app/ui/launcher/coverloader.c:1:#include "coverloader.h"
+src/app/ui/launcher/coverloader.c:24:    uint8_t cover_fill;
+src/app/ui/launcher/coverloader.c:31:    lv_coord_t target_width, target_height, target_radius;
+src/app/ui/launcher/coverloader.c:35:    coverloader_t *loader;
+src/app/ui/launcher/coverloader.c:46:} coverloader_req_t;
+src/app/ui/launcher/coverloader.c:49:#define LINKEDLIST_TYPE coverloader_req_t
+src/app/ui/launcher/coverloader.c:67:static const char *coverloader_cache_dir(coverloader_t *loader);
+src/app/ui/launcher/coverloader.c:69:static GS_CLIENT coverloader_gs_client(coverloader_t *loader);
+src/app/ui/launcher/coverloader.c:71:static void coverloader_cache_item_path(char path[4096], const coverloader_req_t *req);
+src/app/ui/launcher/coverloader.c:73:static bool coverloader_memcache_get(coverloader_req_t *req);
+src/app/ui/launcher/coverloader.c:75:static void coverloader_memcache_put(coverloader_req_t *req);
+src/app/ui/launcher/coverloader.c:77:static bool coverloader_filecache_get(coverloader_req_t *req);
+src/app/ui/launcher/coverloader.c:79:static void coverloader_filecache_put(coverloader_req_t *req);
+src/app/ui/launcher/coverloader.c:81:static bool coverloader_fetch(coverloader_req_t *req);
+src/app/ui/launcher/coverloader.c:83:static void coverloader_run_on_main(img_loader_t *loader, img_loader_run_on_main_fn fn, void *args);
+src/app/ui/launcher/coverloader.c:85:static void img_set_cover(lv_obj_t *obj, memcache_item_t *src);
+src/app/ui/launcher/coverloader.c:87:static bool coverloader_is_appitem(const lv_obj_t *obj);
+src/app/ui/launcher/coverloader.c:89:static void coverloader_unlink_memcache_src(lv_obj_t *obj);
+src/app/ui/launcher/coverloader.c:91:static void coverloader_apply_plain(lv_obj_t *obj, memcache_item_t *src);
+src/app/ui/launcher/coverloader.c:93:static void img_loader_start_cb(coverloader_req_t *req);
+src/app/ui/launcher/coverloader.c:95:static void img_loader_result_cb(coverloader_req_t *req);
+src/app/ui/launcher/coverloader.c:97:static void img_loader_cancel_cb(coverloader_req_t *req);
+src/app/ui/launcher/coverloader.c:103:static void coverloader_req_free(coverloader_req_t *req);
+src/app/ui/launcher/coverloader.c:105:static int reqlist_find_by_target(coverloader_req_t *p, const void *v);
+src/app/ui/launcher/coverloader.c:107:static bool cover_is_placeholder(const SDL_Surface *surface);
+src/app/ui/launcher/coverloader.c:121:static const img_loader_impl_t coverloader_impl = {
+src/app/ui/launcher/coverloader.c:122:        .memcache_get = coverloader_memcache_get,
+src/app/ui/launcher/coverloader.c:123:        .memcache_put = coverloader_memcache_put,
+src/app/ui/launcher/coverloader.c:124:        .filecache_get = coverloader_filecache_get,
+src/app/ui/launcher/coverloader.c:125:        .filecache_put = coverloader_filecache_put,
+src/app/ui/launcher/coverloader.c:126:        .fetch = coverloader_fetch,
+src/app/ui/launcher/coverloader.c:127:        .run_on_main = coverloader_run_on_main,
+src/app/ui/launcher/coverloader.c:130:static const img_loader_cb_t coverloader_cb = {
+src/app/ui/launcher/coverloader.c:137:struct coverloader_t {
+src/app/ui/launcher/coverloader.c:142:    coverloader_req_t *reqlist;
+src/app/ui/launcher/coverloader.c:151:coverloader_t *coverloader_new(app_t *app) {
+src/app/ui/launcher/coverloader.c:152:    coverloader_t *loader = malloc(sizeof(coverloader_t));
+src/app/ui/launcher/coverloader.c:155:    loader->base_loader = img_loader_create(&coverloader_impl, app->backend.executor);
+src/app/ui/launcher/coverloader.c:162:void coverloader_unref(coverloader_t *loader) {
+src/app/ui/launcher/coverloader.c:180:void coverloader_display(coverloader_t *loader, const uuidstr_t *uuid, int id, lv_obj_t *target,
+src/app/ui/launcher/coverloader.c:182:    coverloader_req_t *existing = reqlist_find_by(loader->reqlist, target, reqlist_find_by_target);
+src/app/ui/launcher/coverloader.c:187:    coverloader_req_t *req = reqlist_new();
+src/app/ui/launcher/coverloader.c:198:    img_loader_task_t *task = img_loader_load(loader->base_loader, req, &coverloader_cb);
+src/app/ui/launcher/coverloader.c:204:static const char *coverloader_cache_dir(coverloader_t *loader) {
+src/app/ui/launcher/coverloader.c:208:static GS_CLIENT coverloader_gs_client(coverloader_t *loader) {
+src/app/ui/launcher/coverloader.c:212:static void coverloader_cache_item_path(char path[4096], const coverloader_req_t *req) {
+src/app/ui/launcher/coverloader.c:213:    const char *cachedir = coverloader_cache_dir(req->loader);
+src/app/ui/launcher/coverloader.c:219:static bool coverloader_memcache_get(coverloader_req_t *req) {
+src/app/ui/launcher/coverloader.c:227:    key.cover_fill = !coverloader_is_appitem(req->target);
+src/app/ui/launcher/coverloader.c:235:static void coverloader_memcache_put(coverloader_req_t *req) {
+src/app/ui/launcher/coverloader.c:245:            .cover_fill = !coverloader_is_appitem(req->target),
+src/app/ui/launcher/coverloader.c:255:        result->target_radius = lv_obj_get_style_radius(req->target, 0);
+src/app/ui/launcher/coverloader.c:287:static bool coverloader_filecache_get(coverloader_req_t *req) {
+src/app/ui/launcher/coverloader.c:296:    coverloader_cache_item_path(path, req);
+src/app/ui/launcher/coverloader.c:299:        commons_log_warn("CoverLoader", "Failed to load cover from %s: %s", path, IMG_GetError());
+src/app/ui/launcher/coverloader.c:302:    if (cover_is_placeholder(decoded)) {
+src/app/ui/launcher/coverloader.c:342:    /* Grid tiles: letterbox (contain). Hero background: crop to fill the viewport. */
+src/app/ui/launcher/coverloader.c:343:    const bool cover_fill = !coverloader_is_appitem(req->target);
+src/app/ui/launcher/coverloader.c:344:    const double scale = cover_fill
+src/app/ui/launcher/coverloader.c:392:static bool cover_is_placeholder(const SDL_Surface *surface) {
+src/app/ui/launcher/coverloader.c:396:static void coverloader_filecache_put(coverloader_req_t *req) {
+src/app/ui/launcher/coverloader.c:401:static bool coverloader_fetch(coverloader_req_t *req) {
+src/app/ui/launcher/coverloader.c:414:    coverloader_cache_item_path(path, req);
+src/app/ui/launcher/coverloader.c:415:    GS_CLIENT client = coverloader_gs_client(req->loader);
+src/app/ui/launcher/coverloader.c:416:    if (gs_download_cover(client, node->server, req->id, path) != GS_OK) {
+src/app/ui/launcher/coverloader.c:419:    return coverloader_filecache_get(req);
+src/app/ui/launcher/coverloader.c:422:static void coverloader_run_on_main(img_loader_t *loader, img_loader_run_on_main_fn fn, void *args) {
+src/app/ui/launcher/coverloader.c:427:static void img_loader_start_cb(coverloader_req_t *req) {
+src/app/ui/launcher/coverloader.c:428:    if (!coverloader_is_appitem(req->target)) {
+src/app/ui/launcher/coverloader.c:432:    img_set_cover(req->target, NULL);
+src/app/ui/launcher/coverloader.c:436:static void img_loader_result_cb(coverloader_req_t *req) {
+src/app/ui/launcher/coverloader.c:438:    coverloader_t *loader = req->loader;
+src/app/ui/launcher/coverloader.c:441:        if (coverloader_is_appitem(req->target)) {
+src/app/ui/launcher/coverloader.c:443:            img_set_cover(req->target, req->src);
+src/app/ui/launcher/coverloader.c:450:            coverloader_apply_plain(req->target, req->src);
+src/app/ui/launcher/coverloader.c:454:    coverloader_req_free(req);
+src/app/ui/launcher/coverloader.c:455:    coverloader_unref(loader);
+src/app/ui/launcher/coverloader.c:458:static void img_loader_cancel_cb(coverloader_req_t *req) {
+src/app/ui/launcher/coverloader.c:463:    coverloader_t *loader = req->loader;
+src/app/ui/launcher/coverloader.c:465:    coverloader_req_free(req);
+src/app/ui/launcher/coverloader.c:466:    coverloader_unref(loader);
+src/app/ui/launcher/coverloader.c:469:static void img_set_cover(lv_obj_t *obj, memcache_item_t *src) {
+src/app/ui/launcher/coverloader.c:472:        coverloader_apply_plain(obj, src);
+src/app/ui/launcher/coverloader.c:476:    coverloader_unlink_memcache_src(obj);
+src/app/ui/launcher/coverloader.c:483:        lv_img_set_src(obj, &holder->styles->defcover_src);
+src/app/ui/launcher/coverloader.c:488:static bool coverloader_is_appitem(const lv_obj_t *obj) {
+src/app/ui/launcher/coverloader.c:496:static void coverloader_unlink_memcache_src(lv_obj_t *obj) {
+src/app/ui/launcher/coverloader.c:507:static void coverloader_apply_plain(lv_obj_t *obj, memcache_item_t *src) {
+src/app/ui/launcher/coverloader.c:508:    coverloader_unlink_memcache_src(obj);
+src/app/ui/launcher/coverloader.c:531:        if (coverloader_is_appitem(obj)) {
+src/app/ui/launcher/coverloader.c:533:            lv_img_set_src(obj, &holder->styles->defcover_src);
+src/app/ui/launcher/coverloader.c:569:        lv_coord_t w, h, radius;
+src/app/ui/launcher/coverloader.c:577:    key_to_remove.radius = LV_MIN3(item->target_radius, item->target_width, item->target_height);
+src/app/ui/launcher/coverloader.c:599:static inline void coverloader_req_free(coverloader_req_t *req) {
+src/app/ui/launcher/coverloader.c:603:static int reqlist_find_by_target(coverloader_req_t *p, const void *v) {
+src/app/ui/launcher/coverloader.c:608:    coverloader_req_t *req = lv_event_get_user_data(e);
+src/app/ui/launcher/appitem.view.c:21:    lv_obj_add_style(item, &styles->cover, 0);
+src/app/ui/launcher/appitem.view.c:28:     * cover art used to lose its rounding -- and gain a slight overflow past the
+src/app/ui/launcher/appitem.view.c:30:     * Moonlight client, which doesn't zoom the selected tile either. */
+src/app/ui/launcher/appitem.view.c:69:    lv_style_init(&style->cover);
+src/app/ui/launcher/appitem.view.c:70:    lv_style_set_pad_all(&style->cover, 0);
+src/app/ui/launcher/appitem.view.c:71:    /* Subtle rounding, no border, no shadow: the theme is OLED-first (near-black
+src/app/ui/launcher/appitem.view.c:73:     * reads as a hard-edged rectangle around the corner radius instead of a soft
+src/app/ui/launcher/appitem.view.c:75:    lv_style_set_radius(&style->cover, LV_DPX(6));
+src/app/ui/launcher/appitem.view.c:76:    lv_style_set_clip_corner(&style->cover, true);
+src/app/ui/launcher/appitem.view.c:77:    lv_style_set_border_width(&style->cover, 0);
+src/app/ui/launcher/appitem.view.c:78:    lv_style_set_shadow_opa(&style->cover, LV_OPA_TRANSP);
+src/app/ui/launcher/appitem.view.c:79:    lv_style_set_outline_color(&style->cover, ml_color_hex(ML_COLOR_PRIMARY));
+src/app/ui/launcher/appitem.view.c:80:    lv_style_set_outline_width(&style->cover, LV_DPX(4));
+src/app/ui/launcher/appitem.view.c:81:    lv_style_set_outline_opa(&style->cover, LV_OPA_TRANSP);
+src/app/ui/launcher/appitem.view.c:82:    lv_style_set_outline_pad(&style->cover, LV_DPX(3));
+src/app/ui/launcher/appitem.view.c:87:    lv_style_set_radius(&style->btn, LV_RADIUS_CIRCLE);
+src/app/ui/launcher/appitem.view.c:88:    lv_style_set_bg_color(&style->btn, ml_color_hex(ML_COLOR_PRIMARY));
+src/app/ui/launcher/appitem.view.c:89:    lv_style_set_bg_opa(&style->btn, LV_OPA_COVER);
+src/app/ui/launcher/appitem.view.c:91:    lv_style_set_border_opa(&style->btn, LV_OPA_TRANSP);
+src/app/ui/launcher/appitem.view.c:114:    style->defcover_src.header.w = 0;
+src/app/ui/launcher/appitem.view.c:115:    style->defcover_src.header.h = 0;
+src/app/ui/launcher/appitem.view.c:116:    style->defcover_src.header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA;
+src/app/ui/launcher/appitem.view.c:117:    style->defcover_src.data_size = sizeof(lv_sdl_img_data_t);
+src/app/ui/launcher/appitem.view.c:118:    style->defcover_src.data = (const uint8_t *) &lv_sdl_img_data_defcover;
+src/app/ui/launcher/appitem.view.c:122:    lv_style_reset(&style->cover);
+src/app/ui/launcher/coverloader.h:10:struct coverloader_t;
+src/app/ui/launcher/coverloader.h:13:typedef struct coverloader_t coverloader_t;
+src/app/ui/launcher/coverloader.h:15:coverloader_t *coverloader_new(app_t *app);
+src/app/ui/launcher/coverloader.h:17:void coverloader_unref(coverloader_t *loader);
+src/app/ui/launcher/coverloader.h:19:void coverloader_display(coverloader_t *loader, const uuidstr_t *uuid, int id, lv_obj_t *target,
+src/app/ui/launcher/server.popup.h:8: * Lists every paired/discovered host known to the pcmanager, with the same
+src/app/ui/launcher/apps.controller.h:4:#include "coverloader.h"
+src/app/ui/launcher/apps.controller.h:11:    lv_style_t cover;
+src/app/ui/launcher/apps.controller.h:16:    lv_img_dsc_t defcover_src;
+src/app/ui/launcher/apps.controller.h:31:    coverloader_t *coverloader;
+src/app/ui/launcher/apps.controller.h:65:/** Move focus into the game grid. */
+src/app/ui/launcher/apps.controller.c:11:#include "coverloader.h"
+src/app/ui/launcher/apps.controller.c:18:#include "lv_gridview.h"
+src/app/ui/launcher/apps.controller.c:69:static void gridview_focus_with_key_state(lv_obj_t *grid, int idx);
+src/app/ui/launcher/apps.controller.c:103:static void update_grid_config(apps_fragment_t *controller);
+src/app/ui/launcher/apps.controller.c:124:static lv_gridview_data_change_t *apps_list_detect_change(const apploader_list_t *old_list,
+src/app/ui/launcher/apps.controller.c:139:const static lv_gridview_adapter_t apps_adapter = {
+src/app/ui/launcher/apps.controller.c:198:    lv_obj_set_style_bg_color(view, lv_color_black(), 0);
+src/app/ui/launcher/apps.controller.c:199:    lv_obj_set_style_bg_opa(view, LV_OPA_COVER, 0);
+src/app/ui/launcher/apps.controller.c:201:    lv_obj_t *applist = controller->applist = lv_gridview_create(view);
+src/app/ui/launcher/apps.controller.c:209:    lv_obj_set_style_radius(applist, 0, 0);
+src/app/ui/launcher/apps.controller.c:210:    lv_obj_set_style_border_side(applist, LV_BORDER_SIDE_NONE, 0);
+src/app/ui/launcher/apps.controller.c:211:    lv_obj_set_style_bg_opa(applist, LV_OPA_TRANSP, 0);
+src/app/ui/launcher/apps.controller.c:215:    lv_gridview_set_key_focus_clamp(applist, true);
+src/app/ui/launcher/apps.controller.c:218:    lv_gridview_set_adapter(applist, &apps_adapter);
+src/app/ui/launcher/apps.controller.c:238:    lv_obj_set_style_border_width(errordetail, LV_DPX(2), 0);
+src/app/ui/launcher/apps.controller.c:239:    lv_obj_set_style_border_opa(errordetail, LV_OPA_50, 0);
+src/app/ui/launcher/apps.controller.c:240:    lv_obj_set_style_border_color(errordetail, lv_palette_main(LV_PALETTE_BLUE_GREY), 0);
+src/app/ui/launcher/apps.controller.c:242:    lv_obj_set_style_radius(errordetail, LV_DPX(20), 0);
+src/app/ui/launcher/apps.controller.c:250:    lv_obj_set_style_border_side(actions, LV_BORDER_SIDE_NONE, 0);
+src/app/ui/launcher/apps.controller.c:265:    controller->coverloader = coverloader_new(controller->global);
+src/app/ui/launcher/apps.controller.c:276:    update_grid_config(controller);
+src/app/ui/launcher/apps.controller.c:297:static void update_grid_config(apps_fragment_t *controller) {
+src/app/ui/launcher/apps.controller.c:322:     * visible height) so the grid keeps the same overall tile height/scroll
+src/app/ui/launcher/apps.controller.c:331:     * column, so tiles match the source aspect without changing row height.
+src/app/ui/launcher/apps.controller.c:332:     * Columns are laid out as equal fr tracks by lv_gridview (see update_col_dsc
+src/app/ui/launcher/apps.controller.c:333:     * in lv_gridview.c) with LV_GRID_ALIGN_CENTER, so a narrower item is simply
+src/app/ui/launcher/apps.controller.c:334:     * centered within its track -- this is what gives the covers extra
+src/app/ui/launcher/apps.controller.c:348:    lv_gridview_set_config(applist, col_count, row_height, LV_GRID_ALIGN_CENTER, LV_GRID_ALIGN_CENTER);
+src/app/ui/launcher/apps.controller.c:350:    controller->appitem_style.defcover_src.header.w = col_width;
+src/app/ui/launcher/apps.controller.c:351:    controller->appitem_style.defcover_src.header.h = row_height;
+src/app/ui/launcher/apps.controller.c:360:    coverloader_unref(controller->coverloader);
+src/app/ui/launcher/apps.controller.c:368:            update_grid_config(controller);
+src/app/ui/launcher/apps.controller.c:369:            lv_gridview_rebind(controller->applist);
+src/app/ui/launcher/apps.controller.c:538:     * item-level focus if the grid doesn't already have one -- unconditionally
+src/app/ui/launcher/apps.controller.c:540:     * while the user is actively navigating inside the grid) was snapping
+src/app/ui/launcher/apps.controller.c:547:    if (lv_gridview_get_focused_index(fragment->applist) < 0) {
+src/app/ui/launcher/apps.controller.c:549:        gridview_focus_with_key_state(fragment->applist, idx);
+src/app/ui/launcher/apps.controller.c:576:    lv_gridview_data_change_t *changes = apps_list_detect_change(fragment->apploader_apps, apps, &num_changes);
+src/app/ui/launcher/apps.controller.c:579:     * returning apps in a new order) forces a full grid rebuild via
+src/app/ui/launcher/apps.controller.c:580:     * lv_gridview_set_data_advanced() below. lv_gridview itself already
+src/app/ui/launcher/apps.controller.c:582:     * rebuild (see grid_recycle_item() in lv_gridview.c), so if the grid
+src/app/ui/launcher/apps.controller.c:587:     * focus *leaves* the grid (applist_focus_leave). If the grid doesn't
+src/app/ui/launcher/apps.controller.c:592:     * We deliberately do NOT call lv_gridview_focus() here: doing so while
+src/app/ui/launcher/apps.controller.c:593:     * the grid already owns focus would fight the preservation above using
+src/app/ui/launcher/apps.controller.c:597:        int live_focus = lv_gridview_get_focused_index(fragment->applist);
+src/app/ui/launcher/apps.controller.c:619:    lv_gridview_set_data_advanced(fragment->applist, apps, changes, num_changes);
+src/app/ui/launcher/apps.controller.c:650:    /* lv_gridview's fill_rows() rebinds every visible tile on every single
+src/app/ui/launcher/apps.controller.c:651:     * lv_gridview_set_data_advanced() call, including when the view wasn't
+src/app/ui/launcher/apps.controller.c:653:     * that finds nothing changed). coverloader_display() unconditionally
+src/app/ui/launcher/apps.controller.c:655:     * cover art even when it's already correct -- that's what caused the
+src/app/ui/launcher/apps.controller.c:656:     * cover art to visibly flicker on every poll. Skip it when this view is
+src/app/ui/launcher/apps.controller.c:657:     * already displaying the right app's cover. */
+src/app/ui/launcher/apps.controller.c:659:        coverloader_display(controller->coverloader, &controller->uuid, app->base.id, item,
+src/app/ui/launcher/apps.controller.c:734:static int adapter_item_count(lv_obj_t *grid, void *data) {
+src/app/ui/launcher/apps.controller.c:736:    apps_fragment_t *controller = lv_obj_get_user_data(grid);
+src/app/ui/launcher/apps.controller.c:745:static void adapter_bind_view(lv_obj_t *grid, lv_obj_t *item_view, void *data, int position) {
+src/app/ui/launcher/apps.controller.c:746:    apps_fragment_t *controller = lv_obj_get_user_data(grid);
+src/app/ui/launcher/apps.controller.c:755:/* lv_gridview_focus() reports its FOCUSED event using lv_indev_get_act(),
+src/app/ui/launcher/apps.controller.c:756: * which is NULL whenever focus is routed into the grid programmatically
+src/app/ui/launcher/apps.controller.c:760: * programmatic case the tile ends up focused internally
+src/app/ui/launcher/apps.controller.c:761: * (grid->focused_index is correct) but shows no selection outline at all.
+src/app/ui/launcher/apps.controller.c:763: * set_detail_opened() already does for non-gridview objects. */
+src/app/ui/launcher/apps.controller.c:764:static void gridview_focus_with_key_state(lv_obj_t *grid, int idx) {
+src/app/ui/launcher/apps.controller.c:765:    lv_gridview_focus(grid, idx);
+src/app/ui/launcher/apps.controller.c:766:    lv_obj_t *focused_item = lv_gridview_get_item_view(grid, idx);
+src/app/ui/launcher/apps.controller.c:776:    gridview_focus_with_key_state(controller->applist, idx);
+src/app/ui/launcher/apps.controller.c:782:    controller->focus_backup = lv_gridview_get_focused_index(controller->applist);
+src/app/ui/launcher/apps.controller.c:783:    lv_gridview_focus(controller->applist, -1);
+src/app/ui/launcher/apps.controller.c:795:    lv_gridview_rebind(controller->applist);
+src/app/ui/launcher/apps.controller.c:937:static lv_gridview_data_change_t *apps_list_detect_change(const apploader_list_t *old_list,
+src/app/ui/launcher/apps.controller.c:941:        /* Must be non-NULL: lv_gridview_set_data_advanced() treats a NULL
+src/app/ui/launcher/apps.controller.c:945:         * pointer to avoid a full, unnecessary grid rebuild. Freed by the
+src/app/ui/launcher/apps.controller.c:947:        return calloc(1, sizeof(lv_gridview_data_change_t));
+src/app/ui/launcher/apps.controller.c:964:     * still fully recycle and rebuild every visible tile on every poll (the
+src/app/ui/launcher/apps.controller.c:965:     * cause of the cover art flickering on every ~10s refresh), even when
+src/app/ui/launcher/apps.controller.c:967:    return calloc(1, sizeof(lv_gridview_data_change_t));
+src/app/ui/launcher/apps.controller.c:992:    gridview_focus_with_key_state(controller->applist, idx);
+src/app/ui/launcher/apps.controller.c:1000:    int idx = lv_gridview_get_focused_index(controller->applist);
+src/app/ui/launcher/server.popup.c:123:    lv_obj_set_style_radius(list, lv_dpx(8), 0);
+src/app/ui/streaming/streaming.controller.c:335:                lv_obj_set_style_bg_opa(controller->progress->parent, LV_OPA_TRANSP, 0);
+src/app/ui/streaming/streaming.controller.c:439:    lv_obj_set_style_radius(notice, LV_DPX(5), 0);
+src/app/ui/streaming/streaming.controller.c:442:    lv_obj_set_style_border_opa(notice, LV_OPA_TRANSP, 0);
+src/app/ui/streaming/streaming.controller.c:443:    lv_obj_set_style_bg_opa(notice, LV_OPA_40, 0);
+src/app/ui/streaming/streaming.controller.c:444:    lv_obj_set_style_bg_color(notice, lv_color_black(), 0);
+src/app/ui/streaming/streaming.view.c:80:    lv_obj_set_style_bg_opa(actions, LV_OPA_COVER, 0);
+src/app/ui/streaming/streaming.view.c:88:    lv_obj_set_style_bg_color(kbd_btn, lv_palette_main(LV_PALETTE_BLUE), 0);
+src/app/ui/streaming/streaming.view.c:97:    lv_obj_set_style_bg_color(vmouse_btn, lv_palette_main(LV_PALETTE_GREEN), 0);
+src/app/ui/streaming/streaming.view.c:110:    lv_obj_set_style_bg_color(suspend_btn, lv_palette_main(LV_PALETTE_AMBER), 0);
+src/app/ui/streaming/streaming.view.c:119:    lv_obj_set_style_bg_color(exit_btn, lv_palette_main(LV_PALETTE_RED), 0);
+src/app/ui/streaming/streaming.view.c:128:    lv_obj_set_style_bg_color(stats, lv_color_black(), 0);
+src/app/ui/streaming/streaming.view.c:129:    lv_obj_set_style_bg_opa(stats, LV_OPA_40, 0);
+src/app/ui/streaming/streaming.view.c:130:    lv_obj_set_style_bg_opa(stats, LV_OPA_30, LV_STATE_USER_1);
+src/app/ui/streaming/streaming.view.c:159:        lv_obj_set_style_bg_opa(stats_pin, LV_OPA_TRANSP, 0);
+src/app/ui/streaming/streaming.view.c:160:        lv_obj_set_style_border_opa(stats_pin, LV_OPA_TRANSP, 0);
+src/app/ui/streaming/streaming.view.c:162:        lv_obj_set_style_radius(stats_pin, LV_DPX(4), 0);
+src/app/ui/streaming/streaming.view.c:228:    lv_style_set_radius(&controller->overlay_button_style, LV_DPX(8));
+src/app/ui/streaming/streaming.view.c:269:    lv_obj_set_style_bg_opa(stats_title, LV_OPA_20, 0);
+src/app/ui/streaming/streaming.view.c:270:    lv_obj_set_style_bg_color(stats_title, lv_color_black(), 0);
+src/app/ui/streaming/streaming.view.c:276:    lv_obj_set_style_bg_color(stats_pin, lv_color_black(), 0);
+src/app/ui/streaming/streaming.view.c:277:    lv_obj_set_style_bg_opa(stats_pin, LV_OPA_20, 0);
+src/app/ui/streaming/streaming.view.c:279:    lv_obj_set_style_radius(stats_pin, LV_DPX(4), 0);
+src/app/ui/streaming/streaming.view.c:286:    lv_obj_set_style_bg_opa(stats_pin, LV_OPA_40, LV_STATE_PRESSED);
+src/app/ui/streaming/streaming.view.c:288:    lv_obj_set_style_bg_color(stats_pin, lv_color_black(), LV_STATE_CHECKED);
+src/app/ui/streaming/streaming.view.c:290:    lv_obj_set_style_bg_opa(stats_pin, LV_OPA_10, LV_STATE_CHECKED);
+src/app/ui/streaming/soft_keyboard.c:351:    lv_obj_set_style_radius(btnm, LV_DPX(6), LV_PART_ITEMS);
+src/app/ui/streaming/soft_keyboard.c:352:    lv_obj_set_style_bg_color(btnm, ml_color_hex(ML_COLOR_SURFACE), LV_PART_ITEMS);
+src/app/ui/streaming/soft_keyboard.c:353:    lv_obj_set_style_bg_opa(btnm, LV_OPA_COVER, LV_PART_ITEMS);
+src/app/ui/streaming/soft_keyboard.c:354:    lv_obj_set_style_border_color(btnm, ml_color_hex(ML_COLOR_BORDER), LV_PART_ITEMS);
+src/app/ui/streaming/soft_keyboard.c:355:    lv_obj_set_style_border_width(btnm, LV_DPX(1), LV_PART_ITEMS);
+src/app/ui/streaming/soft_keyboard.c:357:    lv_obj_set_style_bg_color(btnm, ml_color_hex(ML_COLOR_SURFACE_HI), LV_PART_ITEMS | LV_STATE_PRESSED);
+src/app/ui/streaming/soft_keyboard.c:358:    lv_obj_set_style_bg_color(btnm, ml_color_hex(ML_COLOR_PRIMARY), LV_PART_ITEMS | LV_STATE_FOCUSED);
+src/app/ui/streaming/soft_keyboard.c:359:    lv_obj_set_style_bg_opa(btnm, LV_OPA_COVER, LV_PART_ITEMS | LV_STATE_FOCUSED);
+src/app/ui/streaming/soft_keyboard.c:360:    lv_obj_set_style_bg_color(btnm, ml_color_hex(ML_COLOR_PRIMARY), LV_PART_ITEMS | LV_STATE_FOCUS_KEY);
+src/app/ui/streaming/soft_keyboard.c:361:    lv_obj_set_style_bg_opa(btnm, LV_OPA_COVER, LV_PART_ITEMS | LV_STATE_FOCUS_KEY);
+src/app/ui/streaming/soft_keyboard.c:362:    lv_obj_set_style_bg_color(btnm, lv_color_hex(0xd4820a), LV_PART_ITEMS | LV_STATE_CHECKED);
+src/app/ui/streaming/soft_keyboard.c:363:    lv_obj_set_style_bg_opa(btnm, LV_OPA_COVER, LV_PART_ITEMS | LV_STATE_CHECKED);
+src/app/ui/streaming/soft_keyboard.c:364:    lv_obj_set_style_bg_color(btnm, lv_color_hex(0xd4820a),
+src/app/ui/streaming/soft_keyboard.c:366:    lv_obj_set_style_bg_opa(btnm, LV_OPA_COVER, LV_PART_ITEMS | LV_STATE_CHECKED | LV_STATE_FOCUSED);
+src/app/ui/streaming/soft_keyboard.c:367:    lv_obj_set_style_bg_color(btnm, lv_color_hex(0xd4820a),
+src/app/ui/streaming/soft_keyboard.c:369:    lv_obj_set_style_bg_opa(btnm, LV_OPA_COVER, LV_PART_ITEMS | LV_STATE_CHECKED | LV_STATE_FOCUS_KEY);
+src/app/ui/streaming/soft_keyboard.c:381:    lv_obj_set_style_bg_color(cont, lv_color_black(), 0);
+src/app/ui/streaming/soft_keyboard.c:382:    lv_obj_set_style_bg_opa(cont, LV_OPA_70, 0);
+src/app/ui/streaming/soft_keyboard.c:401:    lv_obj_set_style_bg_color(kbd_content, ml_color_hex(ML_COLOR_SURFACE_ALT), 0);
+src/app/ui/streaming/soft_keyboard.c:402:    lv_obj_set_style_bg_opa(kbd_content, LV_OPA_COVER, 0);
+src/app/ui/streaming/soft_keyboard.c:423:    lv_obj_set_style_bg_opa(btnm, LV_OPA_TRANSP, 0);
+src/app/ui/streaming/soft_keyboard.c:424:    lv_obj_set_style_border_opa(btnm, LV_OPA_TRANSP, 0);
+src/app/ui/settings/settings.view.c:28:    lv_obj_set_style_bg_color(header, ml_color_hex(ML_COLOR_BG), 0);
+src/app/ui/settings/settings.view.c:44:    lv_obj_set_style_radius(close_btn, LV_RADIUS_CIRCLE, 0);
+src/app/ui/settings/settings.view.c:45:    lv_obj_set_style_bg_color(close_btn, ml_color_hex(ML_COLOR_SURFACE_ALT), 0);
+src/app/ui/settings/settings.view.c:52:    lv_obj_set_style_bg_color(content, ml_color_hex(ML_COLOR_BG), 0);
+src/app/ui/settings/settings.view.c:61:        lv_obj_set_grid_dsc_array(content, col_dsc, row_dsc);
+src/app/ui/settings/settings.view.c:64:        lv_obj_set_style_radius(nav, 0, 0);
+src/app/ui/settings/settings.view.c:65:        lv_obj_set_style_border_width(nav, 0, 0);
+src/app/ui/settings/settings.view.c:67:        lv_obj_set_grid_cell(nav, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+src/app/ui/settings/settings.view.c:74:        lv_obj_set_style_radius(detail, 0, 0);
+src/app/ui/settings/settings.view.c:76:        lv_obj_set_style_border_width(detail, 0, 0);
+src/app/ui/settings/settings.view.c:77:        lv_obj_set_grid_cell(detail, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+src/app/ui/settings/settings.controller.c:221:            lv_obj_set_style_bg_opa(item_view, LV_OPA_COVER, LV_STATE_FOCUS_KEY);
+src/app/ui/settings/settings.controller.c:1071:    lv_obj_set_style_bg_color(xb, ml_color_hex(ML_COLOR_SURFACE_ALT), 0);
+src/app/ui/settings/settings.controller.c:1072:    lv_obj_set_style_bg_opa(xb, LV_OPA_COVER, 0);
+src/app/ui/settings/settings.controller.c:1073:    lv_obj_set_style_radius(xb, LV_RADIUS_CIRCLE, 0);
+src/app/ui/settings/settings.controller.c:1086:        lv_obj_set_style_bg_color(backdrop, ml_color_hex(ML_COLOR_BG), 0);
+src/app/ui/settings/settings.controller.c:1087:        lv_obj_set_style_bg_opa(backdrop, LV_OPA_70, 0);
+src/app/ui/settings/settings.controller.c:1089:    lv_obj_set_style_bg_color(mbox, ml_color_hex(ML_COLOR_SURFACE), 0);
+src/app/ui/settings/settings.controller.c:1090:    lv_obj_set_style_bg_opa(mbox, LV_OPA_COVER, 0);
+src/app/ui/settings/settings.controller.c:1091:    lv_obj_set_style_border_color(mbox, ml_color_hex(ML_COLOR_BORDER), 0);
+src/app/ui/settings/settings.controller.c:1092:    lv_obj_set_style_border_width(mbox, LV_DPX(1), 0);
+src/app/ui/settings/settings.controller.c:1093:    lv_obj_set_style_radius(mbox, LV_DPX(12), 0);
+src/app/ui/settings/settings.controller.c:1105:        lv_obj_set_style_bg_color(content, ml_color_hex(ML_COLOR_SURFACE), 0);
+src/app/ui/settings/settings.controller.c:1106:        lv_obj_set_style_bg_opa(content, LV_OPA_COVER, 0);
+src/app/ui/settings/settings.controller.c:1107:        lv_obj_set_style_border_width(content, 0, 0);
+src/app/ui/settings/settings.controller.c:1174:    lv_obj_set_style_bg_color(panel, ml_color_hex(ML_COLOR_SURFACE), 0);
+src/app/ui/settings/settings.controller.c:1175:    lv_obj_set_style_bg_opa(panel, LV_OPA_COVER, 0);
+src/app/ui/settings/settings.controller.c:1176:    lv_obj_set_style_border_color(panel, ml_color_hex(ML_COLOR_BORDER), 0);
+src/app/ui/settings/settings.controller.c:1177:    lv_obj_set_style_border_width(panel, LV_DPX(1), 0);
+src/app/ui/settings/settings.controller.c:1178:    lv_obj_set_style_radius(panel, LV_DPX(12), 0);
+src/app/ui/settings/settings.controller.c:1292:    lv_obj_set_style_bg_color(backdrop, lv_color_black(), 0);
+src/app/ui/settings/settings.controller.c:1293:    lv_obj_set_style_bg_opa(backdrop, LV_OPA_60, 0);
+src/app/ui/settings/settings.controller.c:1320:    lv_obj_set_style_bg_opa(bar, LV_OPA_COVER, 0);
+src/app/ui/settings/settings.controller.c:1321:    lv_obj_set_style_bg_color(bar, ml_color_hex(ML_COLOR_BG), 0);
+src/app/ui/settings/settings.controller.c:1322:    lv_obj_set_style_border_side(bar, LV_BORDER_SIDE_BOTTOM, 0);
+src/app/ui/settings/settings.controller.c:1323:    lv_obj_set_style_border_width(bar, LV_DPX(1), 0);
+src/app/ui/settings/settings.controller.c:1324:    lv_obj_set_style_border_color(bar, ml_color_hex(ML_COLOR_BORDER), 0);
+src/app/ui/settings/settings.controller.c:1341:    lv_obj_set_style_radius(close_btn, LV_RADIUS_CIRCLE, 0);
+src/app/ui/settings/settings.controller.c:1343:    lv_obj_set_style_border_width(close_btn, 0, 0);
+src/app/ui/settings/settings.controller.c:1365:    lv_obj_set_style_bg_opa(scroll, LV_OPA_TRANSP, 0);
+src/app/ui/settings/settings.controller.c:1372:    lv_obj_set_style_radius(scroll, LV_RADIUS_CIRCLE, LV_PART_SCROLLBAR);
+src/app/ui/settings/settings.controller.c:1373:    lv_obj_set_style_bg_color(scroll, ml_color_hex(ML_COLOR_TEXT_MUTED), LV_PART_SCROLLBAR);
+src/app/ui/settings/settings.controller.c:1374:    lv_obj_set_style_bg_opa(scroll, LV_OPA_50, LV_PART_SCROLLBAR);
+src/app/ui/settings/panes/about.pane.c:41:    lv_obj_set_grid_cell(title_label, LV_GRID_ALIGN_START, 0, 4 - text_span, LV_GRID_ALIGN_CENTER, row, 1);
+src/app/ui/settings/panes/about.pane.c:43:    lv_obj_set_grid_cell(text_label, LV_GRID_ALIGN_END, 4 - text_span, text_span, LV_GRID_ALIGN_CENTER, row, 1);
+src/app/ui/settings/panes/about.pane.c:57:    lv_obj_set_grid_dsc_array(view, col_dsc, controller->row_dsc);
+src/app/ui/settings/panes/pref_obj.c:66:    lv_obj_set_style_bg_opa(view, LV_OPA_TRANSP, 0);
+src/app/ui/settings/panes/pref_obj.c:67:    lv_obj_set_style_radius(view, 0, 0);
+src/app/ui/settings/panes/pref_obj.c:68:    lv_obj_set_style_border_opa(view, LV_OPA_TRANSP, 0);
+src/app/ui/settings/panes/pref_obj.c:77:    lv_obj_set_style_radius(checkbox, LV_DPX(4), 0);
+src/app/ui/settings/panes/pref_obj.c:85:     * the toggle for a single remote OK press. CLICKED alone covers both touch
+src/app/ui/settings/panes/pref_obj.c:234:    lv_obj_set_style_radius(label, LV_DPX(4), 0);
+src/app/ui/settings/panes/pref_obj.c:247:    lv_obj_set_style_border_side(header, LV_BORDER_SIDE_BOTTOM, 0);
+src/app/ui/settings/panes/pref_obj.c:248:    lv_obj_set_style_border_opa(header, LV_OPA_30, 0);
+src/app/ui/settings/panes/pref_obj.c:249:    lv_obj_set_style_border_color(header, ml_color_hex(ML_COLOR_BORDER), 0);
+src/app/ui/settings/panes/pref_obj.c:250:    lv_obj_set_style_border_width(header, LV_DPX(1), 0);
+src/app/ui/settings/panes/video.pane.c:167:                    locstr("Stamp video presentation timestamps on a steady frame grid instead of "
+src/app/ui/settings/panes/video.pane.c:177:    pref_checkbox(view, locstr("Soft recovery (4K)"), &app_configuration->soft_recovery, false);
+src/app/ui/help/help.dialog.c:31:    lv_obj_set_style_border_side(list, LV_BORDER_SIDE_NONE, 0);
+src/app/ui/help/help.dialog.c:32:    lv_obj_set_style_radius(list, 0, 0);
+src/app/ui/root.c:93:    disp->bg_color = lv_color_make(0, 0, 0);
+src/app/ui/root.c:94:    disp->bg_opa = 0;
+src/app/ui/root.c:111:    lv_obj_set_style_bg_opa(ui->container, 0, 0);
+src/app/lvgl/theme/lv_theme_moonlight_colors.h:17:    return lv_color_hex(c);
+src/app/lvgl/theme/lv_theme_moonlight.c:62:            lv_obj_set_style_radius(obj, LV_DPX(10), 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:63:            lv_obj_set_style_bg_color(obj, ml_color_hex(ML_COLOR_SURFACE_ALT), 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:64:            lv_obj_set_style_bg_opa(obj, LV_OPA_COVER, 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:65:            lv_obj_set_style_bg_color(obj, ml_color_hex(ML_COLOR_SURFACE_HI), LV_STATE_PRESSED);
+src/app/lvgl/theme/lv_theme_moonlight.c:66:            lv_obj_set_style_bg_color(obj, ml_color_hex(ML_COLOR_SURFACE_HI), LV_STATE_FOCUSED);
+src/app/lvgl/theme/lv_theme_moonlight.c:77:            const lv_opa_t bg_opa = lv_obj_get_style_bg_opa(obj, 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:78:            if (bg_opa > LV_OPA_TRANSP && bg_opa < LV_OPA_COVER) {
+src/app/lvgl/theme/lv_theme_moonlight.c:79:                lv_obj_set_style_bg_color(obj, ml_color_hex(ML_COLOR_SURFACE), 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:106:        lv_obj_set_style_bg_color(obj, ml_color_hex(ML_COLOR_SURFACE_ALT), 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:107:        lv_obj_set_style_bg_opa(obj, LV_OPA_COVER, 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:109:        lv_obj_set_style_border_color(obj, ml_color_hex(ML_COLOR_BORDER), 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:110:        lv_obj_set_style_border_width(obj, LV_DPX(1), 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:130:        lv_obj_set_style_bg_color(obj, ml_color_hex(ML_COLOR_BG), 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:131:        lv_obj_set_style_bg_opa(obj, LV_OPA_70, 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:141:        lv_obj_set_style_bg_color(obj, ml_color_hex(ML_COLOR_SURFACE_ALT), 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:142:        lv_obj_set_style_bg_opa(obj, LV_OPA_COVER, 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:144:        lv_obj_set_style_border_color(obj, ml_color_hex(ML_COLOR_BORDER), 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:145:        lv_obj_set_style_border_width(obj, LV_DPX(1), 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:147:        lv_obj_set_style_bg_color(obj, ml_color_hex(ML_COLOR_SURFACE), 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:148:        lv_obj_set_style_bg_opa(obj, LV_OPA_COVER, 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:149:        lv_obj_set_style_border_color(obj, ml_color_hex(ML_COLOR_BORDER), 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:150:        lv_obj_set_style_border_width(obj, LV_DPX(1), 0);
+src/app/lvgl/theme/lv_theme_moonlight.c:152:        lv_obj_set_style_bg_color(obj, ml_color_hex(ML_COLOR_SURFACE_HI), LV_PART_SELECTED);
+src/app/lvgl/lv_conf.h:28: *Requires `LV_COLOR_DEPTH = 32` colors and the screen's `bg_opa` should be set to non LV_OPA_COVER value*/
+src/app/lvgl/lv_conf.h:32:#define LV_COLOR_CHROMA_KEY    lv_color_hex(0x00ff00)         /*pure green*/
+src/app/lvgl/lv_conf.h:92: *LV_SHADOW_CACHE_SIZE is the max. shadow size to buffer, where shadow size is `shadow_width + radius`
+src/app/lvgl/input/lv_sdl_drv_wheel_input.c:10:#include "lv_gridview.h"
+src/app/lvgl/input/lv_sdl_drv_wheel_input.c:14:static bool wheel_handle_gridview(app_ui_input_t *input, const SDL_MouseWheelEvent *wheel) {
+src/app/lvgl/input/lv_sdl_drv_wheel_input.c:23:    if (focused == NULL || !lv_obj_check_type(focused, &lv_gridview_class)) {
+src/app/lvgl/input/lv_sdl_drv_wheel_input.c:27:    lv_gridview_page(focused, wheel->y > 0);
+src/app/lvgl/input/lv_sdl_drv_wheel_input.c:58:                     * wheel_handle_gridview's convention: wheel down (y > 0) reveals
+src/app/lvgl/input/lv_sdl_drv_wheel_input.c:94:        } else if (wheel_handle_gridview(input, &e.wheel)) {
+src/app/lvgl/input/lv_sdl_drv_wheel_input.c:95:            /* Page the game grid; do not move group focus or scroll parents. */
+src/app/lvgl/input/lv_sdl_drv_wheel_input.c:101:             * fires when there's actual scroll room). Match wheel_handle_gridview's convention:
+src/app/stream/session.c:283:    config->soft_recovery = app_config->soft_recovery;
+src/app/stream/session_worker.c:143:    if (session->config.auto_adjust_bitrate || session->config.soft_recovery) {
+src/app/stream/session_worker.c:149:            .recovery_only = session->config.soft_recovery && !session->config.auto_adjust_bitrate,
+src/app/stream/adaptive_bitrate.c:28:    bool recovery_only;
+src/app/stream/adaptive_bitrate.c:187:    if (abr_set_bitrate(service, target, "soft-recovery")) {
+src/app/stream/adaptive_bitrate.c:192:        commons_log_info("ABR", "Soft recovery hold for %d ms after drop to %d kbps", hold_ms, target);
+src/app/stream/adaptive_bitrate.c:205:        /* Soft-recovery drops are always honored (including recovery_only mode). */
+src/app/stream/adaptive_bitrate.c:208:        if (service->recovery_only) {
+src/app/stream/adaptive_bitrate.c:302:    service->recovery_only = config->recovery_only;
+src/app/stream/adaptive_bitrate.c:322:                     service->recovery_only ? " (recovery-only)" : "");
+src/app/stream/adaptive_bitrate.c:334:    commons_log_info("ABR", "Queued soft-recovery drop to %d%% (hold %d ms)%s",
+src/app/stream/session.h:71:    bool soft_recovery;
+src/app/stream/adaptive_bitrate.h:22:    bool recovery_only;
+src/app/stream/video/session_video.c:83:static void soft_recovery_reset(void) {
+src/app/stream/video/session_video.c:88:static bool soft_recovery_is_4k(void) {
+src/app/stream/video/session_video.c:98:static bool soft_recovery_pressure(const struct VIDEO_STATS *dst) {
+src/app/stream/video/session_video.c:115:static void soft_recovery_tick(const struct VIDEO_STATS *dst) {
+src/app/stream/video/session_video.c:116:    if (session == NULL || !session->config.soft_recovery || session->abr == NULL) {
+src/app/stream/video/session_video.c:119:    if (!soft_recovery_is_4k()) {
+src/app/stream/video/session_video.c:127:    if (!soft_recovery_pressure(dst)) {
+src/app/stream/video/session_video.c:141:                         "Soft recovery: sustained 4K backlog (RQ=%d decodedFps=%.1f latency=%.1fms) "
+src/app/stream/video/session_video.c:234:    soft_recovery_reset();
+src/app/stream/video/session_video.c:247:     * pacing so the decoder grid matches NTSC clientRefreshRateX100 when set. */
+src/app/stream/video/session_video.c:303:    soft_recovery_reset();
+src/app/stream/video/session_video.c:461:    /* Always sample latency/RQ so soft recovery works with the overlay hidden. */
+src/app/stream/video/session_video.c:479:    soft_recovery_tick(dst);
+src/app/app_settings.c:171:    config->soft_recovery = true;
+src/app/app_settings.c:175:    config->soft_recovery = false;
+src/app/app_settings.c:250:    ini_write_bool(fp, "soft_recovery", config->soft_recovery);
+src/app/app_settings.c:398:    } else if (INI_FULL_MATCH("video", "soft_recovery")) {
+src/app/app_settings.c:399:        config->soft_recovery = INI_IS_TRUE(value);
+src/app/res.h:7:extern const lv_sdl_img_data_t lv_sdl_img_data_defcover;
+src/app/backend/pcmanager/pcmanager.c:2:#include "discovery/discovery.h"
+src/app/backend/pcmanager/pcmanager.c:17:    discovery_init(&manager->discovery, (discovery_callback) pcmanager_lan_host_discovered, manager);
+src/app/backend/pcmanager/pcmanager.c:23:    pcmanager_auto_discovery_stop(manager);
+src/app/backend/pcmanager/pcmanager.c:26:    discovery_deinit(&manager->discovery);
+src/app/backend/pcmanager/pcmanager.c:32:void pcmanager_auto_discovery_start(pcmanager_t *manager) {
+src/app/backend/pcmanager/pcmanager.c:33:    discovery_start(&manager->discovery);
+src/app/backend/pcmanager/pcmanager.c:36:void pcmanager_auto_discovery_stop(pcmanager_t *manager) {
+src/app/backend/pcmanager/pcmanager.c:37:    discovery_stop(&manager->discovery);
+src/app/backend/pcmanager/discovery/discovery.h:25:typedef void (*discovery_callback)(const sockaddr_t *addr, void *user_data);
+src/app/backend/pcmanager/discovery/discovery.h:27:typedef struct discovery_throttle_host_t discovery_throttle_host_t;
+src/app/backend/pcmanager/discovery/discovery.h:29:typedef struct discovery_throttle_t {
+src/app/backend/pcmanager/discovery/discovery.h:30:    discovery_callback callback;
+src/app/backend/pcmanager/discovery/discovery.h:32:    discovery_throttle_host_t *hosts;
+src/app/backend/pcmanager/discovery/discovery.h:34:} discovery_throttle_t;
+src/app/backend/pcmanager/discovery/discovery.h:36:typedef struct discovery_t {
+src/app/backend/pcmanager/discovery/discovery.h:38:    struct discovery_task_t *task;
+src/app/backend/pcmanager/discovery/discovery.h:39:    discovery_throttle_t throttle;
+src/app/backend/pcmanager/discovery/discovery.h:40:} discovery_t;
+src/app/backend/pcmanager/discovery/discovery.h:42:void discovery_init(discovery_t *discovery, discovery_callback callback, void *user_data);
+src/app/backend/pcmanager/discovery/discovery.h:44:void discovery_start(discovery_t *discovery);
+src/app/backend/pcmanager/discovery/discovery.h:46:void discovery_stop(discovery_t *discovery);
+src/app/backend/pcmanager/discovery/discovery.h:48:void discovery_deinit(discovery_t *discovery);
+src/app/backend/pcmanager/discovery/throttle.c:23:struct discovery_throttle_host_t {
+src/app/backend/pcmanager/discovery/throttle.c:25:    Uint32 ttl, last_discovered;
+src/app/backend/pcmanager/discovery/throttle.c:26:    discovery_throttle_host_t *next;
+src/app/backend/pcmanager/discovery/throttle.c:27:    discovery_throttle_host_t *prev;
+src/app/backend/pcmanager/discovery/throttle.c:32:#define LINKEDLIST_TYPE discovery_throttle_host_t
+src/app/backend/pcmanager/discovery/throttle.c:42:static int throttle_hosts_compare_time(discovery_throttle_host_t *a, discovery_throttle_host_t *b);
+src/app/backend/pcmanager/discovery/throttle.c:44:static int throttle_hosts_find_addr(discovery_throttle_host_t *node, const void *addr);
+src/app/backend/pcmanager/discovery/throttle.c:46:static int throttle_hosts_find_not_expired(discovery_throttle_host_t *node, const void *now);
+src/app/backend/pcmanager/discovery/throttle.c:48:static void throttle_hosts_evict(discovery_throttle_host_t **head);
+src/app/backend/pcmanager/discovery/throttle.c:50:static void throttle_host_free(discovery_throttle_host_t *node);
+src/app/backend/pcmanager/discovery/throttle.c:52:void discovery_throttle_init(discovery_throttle_t *throttle, discovery_callback callback, void *user_data) {
+src/app/backend/pcmanager/discovery/throttle.c:59:void discovery_throttle_deinit(discovery_throttle_t *throttle) {
+src/app/backend/pcmanager/discovery/throttle.c:66:void discovery_throttle_on_discovered(discovery_throttle_t *throttle, const sockaddr_t *addr, Uint32 ttl) {
+src/app/backend/pcmanager/discovery/throttle.c:72:    discovery_throttle_host_t *find = throttle_hosts_find_by(throttle->hosts, addr, throttle_hosts_find_addr);
+src/app/backend/pcmanager/discovery/throttle.c:80:    discovery_throttle_host_t *node = throttle_hosts_new();
+src/app/backend/pcmanager/discovery/throttle.c:83:    node->last_discovered = SDL_GetTicks();
+src/app/backend/pcmanager/discovery/throttle.c:92:int throttle_hosts_compare_time(discovery_throttle_host_t *a, discovery_throttle_host_t *b) {
+src/app/backend/pcmanager/discovery/throttle.c:93:    return (int) a->last_discovered - (int) b->last_discovered;
+src/app/backend/pcmanager/discovery/throttle.c:96:static int throttle_hosts_find_addr(discovery_throttle_host_t *node, const void *addr) {
+src/app/backend/pcmanager/discovery/throttle.c:100:void throttle_hosts_evict(discovery_throttle_host_t **head) {
+src/app/backend/pcmanager/discovery/throttle.c:102:    discovery_throttle_host_t *find = throttle_hosts_find_by(*head, &now, throttle_hosts_find_not_expired);
+src/app/backend/pcmanager/discovery/throttle.c:114:int throttle_hosts_find_not_expired(discovery_throttle_host_t *node, const void *now) {
+src/app/backend/pcmanager/discovery/throttle.c:115:    return SDL_TICKS_PASSED(*(Uint32 *) now, node->last_discovered + node->ttl);
+src/app/backend/pcmanager/discovery/throttle.c:118:void throttle_host_free(discovery_throttle_host_t *node) {
+src/app/backend/pcmanager/discovery/impl/microdns.c:24:static void discovery_callback(discovery_task_t *task, int status, const struct rr_entry *entries);
+src/app/backend/pcmanager/discovery/impl/microdns.c:26:static bool discovery_is_stopped(discovery_task_t *task);
+src/app/backend/pcmanager/discovery/impl/microdns.c:28:int discovery_worker(discovery_task_t *task) {
+src/app/backend/pcmanager/discovery/impl/microdns.c:37:    commons_log_info("Discovery", "Start mDNS discovery");
+src/app/backend/pcmanager/discovery/impl/microdns.c:38:    if ((r = mdns_listen(ctx, service_name, 1, RR_PTR, 10, (mdns_stop_func) discovery_is_stopped,
+src/app/backend/pcmanager/discovery/impl/microdns.c:39:                         (mdns_listen_callback) discovery_callback, task)) < 0) {
+src/app/backend/pcmanager/discovery/impl/microdns.c:45:        commons_log_error("Discovery", "fatal: %s", err);
+src/app/backend/pcmanager/discovery/impl/microdns.c:50:    commons_log_info("Discovery", "mDNS discovery stopped");
+src/app/backend/pcmanager/discovery/impl/microdns.c:54:void discovery_worker_stop(discovery_task_t *task) {
+src/app/backend/pcmanager/discovery/impl/microdns.c:60:void discovery_callback(discovery_task_t *task, int status, const struct rr_entry *entries) {
+src/app/backend/pcmanager/discovery/impl/microdns.c:65:        commons_log_error("Discovery", "error: %s", err);
+src/app/backend/pcmanager/discovery/impl/microdns.c:91:        discovery_discovered(task->discovery, addr);
+src/app/backend/pcmanager/discovery/impl/microdns.c:96:bool discovery_is_stopped(discovery_task_t *task) {
+src/app/backend/pcmanager/discovery/impl/dnssd.c:14:struct discovery_task_t {
+src/app/backend/pcmanager/discovery/impl/dnssd.c:21:static int discovery_worker(discovery_task_t *task);
+src/app/backend/pcmanager/discovery/impl/dnssd.c:23:static bool discovery_stopped(discovery_task_t *task);
+src/app/backend/pcmanager/discovery/impl/dnssd.c:49:static void discovery_finalize(void *arg, int result);
+src/app/backend/pcmanager/discovery/impl/dnssd.c:51:void pcmanager_auto_discovery_start(pcmanager_t *manager) {
+src/app/backend/pcmanager/discovery/impl/dnssd.c:53:    if (manager->discovery_task != NULL) {
+src/app/backend/pcmanager/discovery/impl/dnssd.c:57:    discovery_task_t *task = SDL_calloc(1, sizeof(discovery_task_t));
+src/app/backend/pcmanager/discovery/impl/dnssd.c:61:    task->thread = SDL_CreateThread((SDL_ThreadFunction) discovery_worker, "discovery", task);
+src/app/backend/pcmanager/discovery/impl/dnssd.c:62:    manager->discovery_task = task;
+src/app/backend/pcmanager/discovery/impl/dnssd.c:66:void pcmanager_auto_discovery_stop(pcmanager_t *manager) {
+src/app/backend/pcmanager/discovery/impl/dnssd.c:68:    discovery_task_t *task = manager->discovery_task;
+src/app/backend/pcmanager/discovery/impl/dnssd.c:73:    manager->discovery_task = NULL;
+src/app/backend/pcmanager/discovery/impl/dnssd.c:74:    executor_submit(manager->executor, executor_noop, discovery_finalize, task);
+src/app/backend/pcmanager/discovery/impl/dnssd.c:91:        commons_log_warn("Discovery", "Got error: %d", errorCode);
+src/app/backend/pcmanager/discovery/impl/dnssd.c:97:        commons_log_warn("Discovery", "DNSServiceResolve failed");
+src/app/backend/pcmanager/discovery/impl/dnssd.c:119:        commons_log_warn("Discovery", "DNSServiceResolve got error: %d", errorCode);
+src/app/backend/pcmanager/discovery/impl/dnssd.c:132:    discovery_task_t *task = context;
+src/app/backend/pcmanager/discovery/impl/dnssd.c:135:    pcmanager_worker_queue(task->manager, worker_host_discovered, ctx);
+=== DEPLOY ASSETS ===
+deploy/webos/appinfo.json 562 bytes
+deploy/webos/assets/.gitignore 4 bytes
+deploy/webos/assets/gamecontrollerdb_extra.txt 592 bytes
+deploy/webos/icon.png 4467 bytes
+deploy/webos/icon_large.png 9159 bytes
+deploy/webos/splash.png 286719 bytes
