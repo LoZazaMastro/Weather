@@ -6,16 +6,17 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   inspect:
     runs-on: ubuntu-22.04
     timeout-minutes: 15
     steps:
-      - name: Checkout staging tools
+      - name: Checkout staging branch
         uses: actions/checkout@v4
         with:
+          ref: playhub-tv-private-build
           path: staging
       - name: Checkout pristine Aurora 1.1.5 source
         uses: actions/checkout@v4
@@ -42,11 +43,15 @@ jobs:
             grep -RIn --include='*.c' --include='*.h' -E 'grid|tile|cover|poster|lv_color_hex|bg_color|bg_opa|radius|border' src/app | sed -n '1,500p' || true
             echo '=== DEPLOY ASSETS ==='
             find deploy/webos -maxdepth 2 -type f -printf '%p %s bytes\n' | sort
-          } > ../playhub-tv-source-diagnostic.txt
-      - name: Upload source diagnostic
-        uses: actions/upload-artifact@v4
-        with:
-          name: playhub-tv-source-diagnostic
-          path: playhub-tv-source-diagnostic.txt
-          if-no-files-found: error
-          retention-days: 1
+          } > ../staging/playhub-tv-build/source-diagnostic.txt
+      - name: Commit diagnostic to temporary branch
+        shell: bash
+        working-directory: staging
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add playhub-tv-build/source-diagnostic.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'Store Playhub TV source diagnostic [skip ci]'
+          git push origin HEAD:playhub-tv-private-build
