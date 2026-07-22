@@ -1,0 +1,173 @@
+name: Build Playhub TV 1.2.0
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: playhub-tv-private-build
+  cancel-in-progress: true
+
+env:
+  PLAYHUB_VERSION: 1.2.0
+
+jobs:
+  build-webos:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 120
+    steps:
+      - name: Checkout temporary build tools
+        uses: actions/checkout@v4
+        with:
+          ref: playhub-tv-private-build
+          path: staging
+
+      - name: Checkout pristine Aurora TV 1.1.5 source
+        uses: actions/checkout@v4
+        with:
+          repository: GuiDev1994/aurora-tv
+          ref: v1.1.5
+          submodules: recursive
+          path: aurora-src
+
+      - name: Install build dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            build-essential ca-certificates cmake curl file gawk git jq \
+            python3 python3-pil rsync unzip wget zip fonts-dejavu-core
+
+      - name: Install webOS package tool
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp
+          wget -q https://github.com/webosbrew/ares-cli-rs/releases/download/20241111-d97ba96/ares-package_0.1.4-1_amd64.deb
+          sudo apt-get install -y -qq ./ares-package_0.1.4-1_amd64.deb || {
+            sudo dpkg -i ./ares-package_0.1.4-1_amd64.deb
+            sudo apt-get -f install -y -qq
+          }
+          command -v ares-package
+
+      - name: Download and relocate official webOS SDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp
+          curl -fsSL -o arm-webos-linux-gnueabi_sdk-buildroot.tar.gz \
+            https://github.com/openlgtv/buildroot-nc4/releases/download/webos-b17b4cc/arm-webos-linux-gnueabi_sdk-buildroot.tar.gz
+          tar -xzf arm-webos-linux-gnueabi_sdk-buildroot.tar.gz
+          find arm-webos-linux-gnueabi_sdk-buildroot -type f \( -name '*.sh' -o -name 'relocate-sdk' \) -exec sed -i 's/\r$//' {} +
+          ./arm-webos-linux-gnueabi_sdk-buildroot/relocate-sdk.sh
+          test -x /tmp/arm-webos-linux-gnueabi_sdk-buildroot/bin/arm-webos-linux-gnueabi-gcc
+          test -f /tmp/arm-webos-linux-gnueabi_sdk-buildroot/share/buildroot/toolchainfile.cmake
+
+      - name: Prepare Playhub TV source and artwork
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL -o /tmp/playhub-logo.png \
+            https://raw.githubusercontent.com/LoZazaMastro/Playhub/main/docs/images/logo.png
+          python3 staging/playhub-tv-build/prepare.py aurora-src /tmp/playhub-logo.png
+
+          # The app ID must stay stable or webOS treats this as a different app,
+          # losing Aurora's existing paired-host settings and discovery context.
+          grep -F 'set(WEBOS_APPINFO_ID "com.aurora.gamestream")' aurora-src/CMakeLists.txt
+          grep -F 'set(MOONLIGHT_VERSION "1.2.0")' aurora-src/CMakeLists.txt
+          grep -F 'row_height * 600 / 900' aurora-src/src/app/ui/launcher/apps.controller.c
+          grep -F '0xEECC00' aurora-src/src/app/lvgl/theme/lv_theme_moonlight_colors.h
+          grep -F 'sleep(5); /* Playhub TV minimum splash */' aurora-src/src/main.c
+
+      - name: Compile native webOS package from source
+        shell: bash
+        working-directory: aurora-src
+        env:
+          CI: "1"
+          TOOLCHAIN_FILE: /tmp/arm-webos-linux-gnueabi_sdk-buildroot/share/buildroot/toolchainfile.cmake
+          CMAKE_BINARY_DIR: /tmp/playhub-tv-webos-build
+        run: |
+          set -euo pipefail
+          chmod +x scripts/webos/easy_build.sh scripts/webos/gen_gamecontrollerdb.sh
+          sed -i 's/\r$//' scripts/webos/easy_build.sh scripts/webos/gen_gamecontrollerdb.sh
+          ./scripts/webos/easy_build.sh -DCMAKE_BUILD_TYPE=Release
+
+      - name: Package and verify deliverables
+        shell: bash
+        run: |
+          set -euo pipefail
+          RESULT=/tmp/playhub-tv-result
+          mkdir -p "$RESULT"
+
+          SOURCE_IPK="aurora-src/dist/com.aurora.gamestream_${PLAYHUB_VERSION}_arm.ipk"
+          test -s "$SOURCE_IPK"
+          cp "$SOURCE_IPK" "$RESULT/Playhub-TV_${PLAYHUB_VERSION}_arm.ipk"
+
+          # Keep a clean, editable source package. Build output and git metadata are excluded.
+          cat > aurora-src/PLAYHUB-TV-BUILD.md <<EOF
+          # Playhub TV ${PLAYHUB_VERSION}
+
+          Rebuilt from the pristine Aurora TV v1.1.5 source tag.
+
+          - webOS package ID intentionally preserved: com.aurora.gamestream
+          - Aurora streaming, host discovery, pairing and Wake-on-LAN logic preserved
+          - Playhub TV branding and multilingual user-facing strings
+          - OLED-black glass UI with #EECC00 accent
+          - 600x900 game-cover aspect ratio
+          - minimum five-second startup splash
+          EOF
+          (
+            cd aurora-src
+            zip -qr "$RESULT/Playhub-TV_Project_${PLAYHUB_VERSION}.zip" . \
+              -x '.git/*' 'dist/*' 'build/*' '*.ipk' '*_dbgsym.tar.gz'
+          )
+          test -s "$RESULT/Playhub-TV_Project_${PLAYHUB_VERSION}.zip"
+
+          # Inspect the produced IPK rather than trusting the filename.
+          IPK="$RESULT/Playhub-TV_${PLAYHUB_VERSION}_arm.ipk"
+          file "$IPK" | tee "$RESULT/Build-Verification.txt"
+          mkdir -p /tmp/playhub-ipk-inspect
+          (
+            cd /tmp/playhub-ipk-inspect
+            ar x "$IPK"
+            DATA_ARCHIVE=$(find . -maxdepth 1 -type f -name 'data.tar*' | head -1)
+            test -n "$DATA_ARCHIVE"
+            tar -xaf "$DATA_ARCHIVE"
+            APPINFO=$(find . -type f -name appinfo.json | head -1)
+            test -n "$APPINFO"
+            jq -e '.id == "com.aurora.gamestream"' "$APPINFO"
+            jq -e '.version == "1.2.0"' "$APPINFO"
+            jq -e '.title == "Playhub TV"' "$APPINFO"
+            jq -e '.dialAppName == "Playhub TV"' "$APPINFO"
+            test -x ./bin/aurora
+            file ./bin/aurora
+            printf '\nPackaged appinfo.json:\n' >> "$RESULT/Build-Verification.txt"
+            cat "$APPINFO" >> "$RESULT/Build-Verification.txt"
+          )
+
+          # No residual title-case Aurora branding is allowed in editable app text.
+          if grep -RInE --include='*.c' --include='*.h' --include='*.po' --include='*.pot' \
+              --include='*.json' --include='*.yml' --include='*.desktop' \
+              '\bAurora( TV)?\b|\bAURORA\b' aurora-src/src aurora-src/deploy; then
+            echo 'Residual user-facing Aurora branding found' >&2
+            exit 1
+          fi
+
+          sha256sum "$RESULT"/Playhub-TV_* > "$RESULT/SHA256SUMS.txt"
+          printf '\nSource tag: GuiDev1994/aurora-tv v1.1.5\n' >> "$RESULT/Build-Verification.txt"
+          printf 'Stable package ID: com.aurora.gamestream\n' >> "$RESULT/Build-Verification.txt"
+          printf 'Deliverables:\n' >> "$RESULT/Build-Verification.txt"
+          ls -lh "$RESULT" >> "$RESULT/Build-Verification.txt"
+
+      - name: Upload Playhub TV packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: Playhub-TV-1.2.0
+          path: /tmp/playhub-tv-result/*
+          if-no-files-found: error
+          retention-days: 1
