@@ -1,0 +1,35 @@
+name: Temporary Playhub TV Build
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build-webos:
+    if: github.head_ref == 'playhub-tv-build-temp-20260722'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    steps:
+      - name: Checkout pull request
+        uses: actions/checkout@v4
+
+      - name: Build and verify Playhub TV
+        shell: bash
+        run: bash playhub-tv-build/ci-build.sh
+
+      - name: Upload the four requested files
+        uses: actions/upload-artifact@v4
+        with:
+          name: Playhub-TV-1.2.0-files
+          path: |
+            /tmp/result/Playhub-TV_1.2.0_arm.ipk
+            /tmp/result/Playhub-TV_Project_1.2.0.zip
+            /tmp/result/Build-Verification.txt
+            /tmp/result/SHA256SUMS.txt
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
