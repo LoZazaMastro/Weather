@@ -3,6 +3,8 @@ name: Playhub TV source diagnostic
 on:
   push:
     branches: [playhub-tv-private-build]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
