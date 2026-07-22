@@ -1,0 +1,50 @@
+name: Playhub TV prepare debug
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  prepare-debug:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout staging branch
+        uses: actions/checkout@v4
+        with:
+          ref: playhub-tv-private-build
+          path: staging
+      - name: Checkout Aurora source
+        uses: actions/checkout@v4
+        with:
+          repository: GuiDev1994/aurora-tv
+          ref: v1.1.5
+          path: aurora-src
+      - name: Run preparation and capture result
+        shell: bash
+        run: |
+          set -uo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq python3-pil fonts-dejavu-core curl
+          curl -fsSL -o /tmp/playhub-logo.png https://raw.githubusercontent.com/LoZazaMastro/Playhub/main/docs/images/logo.png
+          set +e
+          python3 staging/playhub-tv-build/prepare.py aurora-src /tmp/playhub-logo.png > staging/playhub-tv-build/prepare-error.txt 2>&1
+          STATUS=$?
+          set -e
+          printf '\nExit status: %s\n' "$STATUS" >> staging/playhub-tv-build/prepare-error.txt
+          cat staging/playhub-tv-build/prepare-error.txt
+      - name: Commit preparation log
+        shell: bash
+        working-directory: staging
+        run: |
+          set -euo pipefail
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add playhub-tv-build/prepare-error.txt
+          git diff --cached --quiet && exit 0
+          git commit -m 'Store Playhub TV preparation log [skip ci]'
+          git push origin HEAD:playhub-tv-private-build
